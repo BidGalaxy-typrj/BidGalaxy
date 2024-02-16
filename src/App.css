@@ -1,0 +1,54 @@
+body {
+  background-color: #C9EDED;
+}
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+@font-face {
+  font-family: cantora;
+  src: url(../public/CantoraOne-Regular.ttf);
+}
+.Cantora {
+  font-family: cantora;
+}
+.wrapper {
+  position: relative;
+  overflow-x: hidden;
+}
+.primaryNavBg{
+  background-color: #0F2D37;
+}
+.primaryNav{
+  height: 90px;
+}
+.secondNavBg{
+  background-color: #69BEE2;
+}
+.secondNav{
+  height: 50px;
+}
+.textColor {
+  color: #28303F;
+}
+.ucAuctionCards{
+  border: 4px solid #69BEE2;
+  background: linear-gradient(152deg, rgba(105, 190, 226, 1), rgba(105, 190, 226, 0.05));
+}
+.slick-slide > div {
+  margin: 0 10px;
+}
+.homeServiceSection{
+  background: linear-gradient(to bottom, rgba(105, 190, 226, 1), rgba(173, 219, 239, 0.547), rgba(196, 229, 244, 0.52));
+}
+.homeServiceUpperCircle{
+  background: linear-gradient(to bottom, rgba(105, 190, 226, 1), rgba(52, 44, 113, 0.6));
+}
+.homeServiceUpperCircleBorder{
+  background: linear-gradient(to bottom right, rgba(7, 9, 55, 1), rgba(105, 190, 226, 1));
+  box-shadow: 16px 0px 0 0 #070937;
+}
+.categoryCard{
+  background: linear-gradient(145deg, rgba(105, 190, 226, 1), rgba(15, 45, 55, 1));
+}
