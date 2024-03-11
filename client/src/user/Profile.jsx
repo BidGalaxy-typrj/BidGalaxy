@@ -58,72 +58,74 @@ const Profile = () => {
                 <div className="flex w-full justify-center text-xl font-cantora textColor uppercase"><span>{"name"}</span></div>
                 <div className="flex w-full justify-center text-xl font-cantora textColor"><span>{"email"}</span></div>
             </div>
-            <div className="w-full p-5">
-                <div className="font-extrabold text-[24px] m-1 textColor font-cantora underline tracking-tighter uppercase">Profile Settings</div>
-                <div className="flex p-2 w-full justify-start items-start">
-                    <div className="flex flex-col p-2 w-1/3 ml-2">
-                        <label htmlFor="first_name" className="font-bold">First Name</label>
-                        <input type="text" name="first_name" className="textColor font-cantora mt-2"></input>
-                    </div>
-                    <div className="flex flex-col p-2 w-1/3 ml-2">
-                        <label htmlFor="middle_name" className="font-bold">Middle Name</label>
-                        <input type="text" name="middle_name" className="textColor font-cantora mt-2"></input>
-                    </div>
-                    <div className="flex flex-col p-2 w-1/3 ml-2">
-                        <label htmlFor="last_name" className="font-bold">Last Name</label>
-                        <input type="text" name="last_name" className="textColor font-cantora mt-2"></input>
-                    </div>
-                </div>
-                <div className="flex p-2 w-full justify-start">
-                    <div className="flex flex-col p-2 w-1/3 ml-2">
-                        <label htmlFor="contact_number" className="font-bold">Contact Number</label>
-                        <input type="text" name="contact_number" className="textColor font-cantora mt-2"></input>
-                    </div>
-                    <div className="flex flex-col p-2 w-1/3 ml-2">
-                        <label htmlFor="email_id" className="font-bold">Email Id</label>
-                        <input type="text" name="email_id" contentEditable="false" value={""} className=" bg-gray-400 textColor font-cantora mt-2 hover:cursor-not-allowed"></input>
-                    </div>
-                    <div className="flex flex-col p-2 w-1/3 ml-2">
-                        <label htmlFor="gender" className="font-bold">Gender</label>
-                        <select name="gender" className="textColor font-cantora mt-2">
-                            <option>Select Gender</option>
-                            <option>Male</option>
-                            <option>Female</option>
-                        </select>
-                    </div>
-                </div>
-                <div className="flex p-2 w-full justify-between">
-                    <div className="flex flex-col p-2 w-1/2 ml-2">
-                        <label htmlFor="first_name" className="font-bold">Address Line 1</label>
-                        <input type="text" name="first_name" className="textColor font-cantora mt-2"></input>
-                    </div>
-                    <div className="flex flex-col p-2 w-1/2 ml-2">
-                        <label htmlFor="last_name" className="font-bold">Address Line 2</label>
-                        <input type="text" name="last_name" className="textColor font-cantora mt-2"></input>
-                    </div>
-                </div>
-                <div className="flex p-2 w-full justify-between">
-                    <div className="flex flex-col p-2 w-1/3 ml-2">
-                        <label htmlFor="city" className="font-bold">City</label>
-                        <input type="text" name="city" className="textColor font-cantora mt-2"></input>
-                    </div>
-                    <div className="flex flex-col p-2 w-1/3 ml-2">
-                        <label htmlFor="state" className="font-bold">State</label>
-                        <input type="text" name="state" className="textColor font-cantora mt-2"></input>
-                    </div>
-                    <div className="flex flex-col p-2 w-1/3 ml-2">
-                        <label htmlFor="postal_code" className="font-bold">Pincode</label>
-                        <input type="number" name="postal_code" className="textColor font-cantora mt-2"></input>
-                    </div>
-                </div>
-                <div className="flex justify-center mt-20">
-                    <button type="submit" className="flex justify-center items-center w-[300px] h-[50px] bg-[#0F2D37] rounded-full">
-                        <div className=' text-white text-2xl font-cantora font-bold uppercase'>
-                            update profile
+            <form>
+                <div className="w-full p-5">
+                    <div className="font-extrabold text-[24px] m-1 textColor font-cantora underline tracking-tighter uppercase">Profile Settings</div>
+                    <div className="flex p-2 w-full justify-start items-start">
+                        <div className="flex flex-col p-2 w-1/3 ml-2">
+                            <label htmlFor="first_name" className="font-bold">First Name</label>
+                            <input type="text" id="first_name" name="first_name" className="textColor font-cantora mt-2"></input>
                         </div>
-                    </button>
+                        <div className="flex flex-col p-2 w-1/3 ml-2">
+                            <label htmlFor="middle_name" className="font-bold">Middle Name</label>
+                            <input type="text" id="middle_name" name="middle_name" className="textColor font-cantora mt-2"></input>
+                        </div>
+                        <div className="flex flex-col p-2 w-1/3 ml-2">
+                            <label htmlFor="last_name" className="font-bold">Last Name</label>
+                            <input type="text" id="last_name" name="last_name" className="textColor font-cantora mt-2"></input>
+                        </div>
+                    </div>
+                    <div className="flex p-2 w-full justify-start">
+                        <div className="flex flex-col p-2 w-1/3 ml-2">
+                            <label htmlFor="contact_number" className="font-bold">Contact Number</label>
+                            <input type="text" id="contact_number" name="contact_number" className="textColor font-cantora mt-2"></input>
+                        </div>
+                        <div className="flex flex-col p-2 w-1/3 ml-2">
+                            <label htmlFor="email_id" className="font-bold">Email Id</label>
+                            <input type="text" id="email_id" name="email_id" contentEditable="false" value={""} className=" bg-gray-400 textColor font-cantora mt-2 hover:cursor-not-allowed"></input>
+                        </div>
+                        <div className="flex flex-col p-2 w-1/3 ml-2">
+                            <label htmlFor="gender" className="font-bold">Gender</label>
+                            <select id="gender" name="gender" className="textColor font-cantora mt-2">
+                                <option>Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div className="flex p-2 w-full justify-between">
+                        <div className="flex flex-col p-2 w-1/2 ml-2">
+                            <label htmlFor="street_address1" className="font-bold">Address Line 1</label>
+                            <input type="text" id="street_address1" name="street_address1" className="textColor font-cantora mt-2"></input>
+                        </div>
+                        <div className="flex flex-col p-2 w-1/2 ml-2">
+                            <label htmlFor="street_address2" className="font-bold">Address Line 2</label>
+                            <input type="text" id="street_address2" name="street_address2" className="textColor font-cantora mt-2"></input>
+                        </div>
+                    </div>
+                    <div className="flex p-2 w-full justify-between">
+                        <div className="flex flex-col p-2 w-1/3 ml-2">
+                            <label htmlFor="city" className="font-bold">City</label>
+                            <input type="text" id="city" name="city" className="textColor font-cantora mt-2"></input>
+                        </div>
+                        <div className="flex flex-col p-2 w-1/3 ml-2">
+                            <label htmlFor="state" className="font-bold">State</label>
+                            <input type="text" id="state" name="state" className="textColor font-cantora mt-2"></input>
+                        </div>
+                        <div className="flex flex-col p-2 w-1/3 ml-2">
+                            <label htmlFor="postal_code" className="font-bold">Pincode</label>
+                            <input type="number" id="postal_code" name="postal_code" className="textColor font-cantora mt-2"></input>
+                        </div>
+                    </div>
+                    <div className="flex justify-center mt-20">
+                        <button type="submit" className="flex justify-center items-center w-[300px] h-[50px] bg-[#0F2D37] rounded-full">
+                            <div className=' text-white text-2xl font-cantora font-bold uppercase'>
+                                update profile
+                            </div>
+                        </button>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     );
 }
