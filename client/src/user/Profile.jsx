@@ -63,29 +63,29 @@ const Profile = () => {
                     <div className="font-extrabold text-[24px] m-1 textColor font-cantora underline tracking-tighter uppercase">Profile Settings</div>
                     <div className="flex p-2 w-full justify-start items-start">
                         <div className="flex flex-col p-2 w-1/3 ml-2">
-                            <label htmlFor="first_name" className="font-bold">First Name</label>
+                            <label htmlFor="first_name" className="font-bold font-cantora required-highlight textColor">First Name</label>
                             <input type="text" id="first_name" name="first_name" className="textColor font-cantora mt-2"></input>
                         </div>
                         <div className="flex flex-col p-2 w-1/3 ml-2">
-                            <label htmlFor="middle_name" className="font-bold">Middle Name</label>
+                            <label htmlFor="middle_name" className="font-bold textColor font-cantora">Middle Name</label>
                             <input type="text" id="middle_name" name="middle_name" className="textColor font-cantora mt-2"></input>
                         </div>
                         <div className="flex flex-col p-2 w-1/3 ml-2">
-                            <label htmlFor="last_name" className="font-bold">Last Name</label>
+                            <label htmlFor="last_name" className="font-bold required-highlight texxtColor font-cantora">Last Name</label>
                             <input type="text" id="last_name" name="last_name" className="textColor font-cantora mt-2"></input>
                         </div>
                     </div>
                     <div className="flex p-2 w-full justify-start">
                         <div className="flex flex-col p-2 w-1/3 ml-2">
-                            <label htmlFor="contact_number" className="font-bold">Contact Number</label>
+                            <label htmlFor="contact_number" className="font-bold required-highlight font-cantora textColor">Contact Number</label>
                             <input type="text" id="contact_number" name="contact_number" className="textColor font-cantora mt-2"></input>
                         </div>
                         <div className="flex flex-col p-2 w-1/3 ml-2">
-                            <label htmlFor="email_id" className="font-bold">Email Id</label>
+                            <label htmlFor="email_id" className="font-bold required-highlight textColor font-cantora">Email Id</label>
                             <input type="text" id="email_id" name="email_id" contentEditable="false" value={""} className=" bg-gray-400 textColor font-cantora mt-2 hover:cursor-not-allowed"></input>
                         </div>
                         <div className="flex flex-col p-2 w-1/3 ml-2">
-                            <label htmlFor="gender" className="font-bold">Gender</label>
+                            <label htmlFor="gender" className="font-bold textColor font-cantora required-highlight">Gender</label>
                             <select id="gender" name="gender" className="textColor font-cantora mt-2">
                                 <option>Select Gender</option>
                                 <option value="male">Male</option>
@@ -95,25 +95,25 @@ const Profile = () => {
                     </div>
                     <div className="flex p-2 w-full justify-between">
                         <div className="flex flex-col p-2 w-1/2 ml-2">
-                            <label htmlFor="street_address1" className="font-bold">Address Line 1</label>
+                            <label htmlFor="street_address1" className="font-bold required-highlight textColor font-cantora">Address Line 1</label>
                             <input type="text" id="street_address1" name="street_address1" className="textColor font-cantora mt-2"></input>
                         </div>
                         <div className="flex flex-col p-2 w-1/2 ml-2">
-                            <label htmlFor="street_address2" className="font-bold">Address Line 2</label>
+                            <label htmlFor="street_address2" className="font-bold textColor required-highlight font-cantora">Address Line 2</label>
                             <input type="text" id="street_address2" name="street_address2" className="textColor font-cantora mt-2"></input>
                         </div>
                     </div>
                     <div className="flex p-2 w-full justify-between">
                         <div className="flex flex-col p-2 w-1/3 ml-2">
-                            <label htmlFor="city" className="font-bold">City</label>
+                            <label htmlFor="city" className="font-bold required-highlight font-cantora textColor">City</label>
                             <input type="text" id="city" name="city" className="textColor font-cantora mt-2"></input>
                         </div>
                         <div className="flex flex-col p-2 w-1/3 ml-2">
-                            <label htmlFor="state" className="font-bold">State</label>
+                            <label htmlFor="state" className="font-bold required-highlight textColor font-cantora">State</label>
                             <input type="text" id="state" name="state" className="textColor font-cantora mt-2"></input>
                         </div>
                         <div className="flex flex-col p-2 w-1/3 ml-2">
-                            <label htmlFor="postal_code" className="font-bold">Pincode</label>
+                            <label htmlFor="postal_code" className="font-bold font-cantora required-highlight textColor">Pincode</label>
                             <input type="number" id="postal_code" name="postal_code" className="textColor font-cantora mt-2"></input>
                         </div>
                     </div>

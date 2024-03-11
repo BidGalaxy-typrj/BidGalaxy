@@ -6,8 +6,24 @@ import Signup from './signup/index';
 import Signin from './signin/index';
 import Success from './signup/Success';
 import AdminDash from './admin/Index';
-import UserDash from './user/Index';
 import SideBar from './admin/SideBar';
+import PlaceItem from './admin/PlaceItem';
+import Users from './admin/Users';
+import UserDetails from './admin/UserDetails';
+import AuctionItems from './admin/AuctionItems';
+import AuctionItemDetails from './admin/AuctionItemDetails';
+import AuctionedItems from './admin/AuctionedItems';
+import AuctionedItemDetails from './admin/AuctionedItemDetails';
+import BuyerDetails from './admin/BuyerDetail';
+import PrivatePolicy from './components/PrivatePolicy';
+import Terms from './components/Terms&Conditions';
+import UserSideBar from './user/SideBar';
+import Dashboard from './user/Dashboard';
+import UpcomingBids from './user/UpcomingBids';
+import OngoingBids from './user/OngoingBids';
+import Profile from './user/Profile';
+import Auction from './user/Auction';
+
 
 
 function App() {
@@ -20,9 +36,24 @@ function App() {
             <Route path='/signin/index' element={<Signin />} />
             <Route path='/signup/Success' element={<Success />} />
             <Route path='/admin/Index' element= {<AdminDash />} />
-            <Route path='/user/Index' element= {<UserDash />} />
             <Route path='/admin/Sidebar' element = {<SideBar />} />
-        </Routes>
+            <Route path='/admin/PlaceItem' element= {<PlaceItem />} />
+            <Route path='/admin/Users' element = {<Users />} />
+            <Route path='/admin/UserDetails' element = {<UserDetails />} />
+            <Route path='/admin/AuctionItems' element = {<AuctionItems />} />
+            <Route path='/admin/AuctionItemDetails' element = {<AuctionItemDetails />} />
+            <Route path='/admin/AuctionedItems' element = {<AuctionedItems />} />
+            <Route path='/admin/AuctionedItemDetails' element = {<AuctionedItemDetails />} />
+            <Route path='/admin/BuyerDetail' element = {<BuyerDetails />} />
+            <Route path='/components/PrivatePolicy' element = {<PrivatePolicy />} />
+            <Route path='/components/Terms&Conditions' element = {<Terms />} />
+            <Route path='/user/SideBar' element = {<UserSideBar />} />
+            <Route path='/user/Dashboard' element = {<Dashboard />} />
+            <Route path='/user/UpcomingBids' element = {<UpcomingBids />} />
+            <Route path='/user/OngoingBids' element = {<OngoingBids />} />
+            <Route path='/user/Profile' element = {<Profile />} />
+            <Route path='/user/Auction' element = {<Auction />} />
+         </Routes>
     );
   }
 

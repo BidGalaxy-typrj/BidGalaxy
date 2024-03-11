@@ -208,7 +208,7 @@ function PlaceItem () {
                             <div className=" uppercase textColor text-lg font-bold font-cantora underline">about item</div>
                             <div className="flex flex-row justify-between gap-12">
                                 <div className="flex-auto">
-                                    <label htmlFor="title" className=" text-base uppercase textColor tracking-wide">title</label>
+                                    <label htmlFor="title" className=" text-base uppercase textColor tracking-wide required-highlight">title</label>
                                     <input 
                                         type="text"
                                         id="title"
@@ -219,7 +219,7 @@ function PlaceItem () {
                                     />
                                 </div>
                                 <div className='shrink w-64'>
-                                    <label htmlFor="type" className=" text-base uppercase textColor tracking-wide">category</label>
+                                    <label htmlFor="type" className=" text-base uppercase textColor tracking-wide required-highlight">category</label>
                                     <select 
                                         id="type"
                                         name="type"
@@ -233,7 +233,7 @@ function PlaceItem () {
                             </div>
                             <div className='flex flex-row justify-between'>
                                 <div className='flex-auto'>
-                                    <label htmlFor="description" className=" text-base uppercase textColor tracking-wide">item details</label>
+                                    <label htmlFor="description" className=" text-base uppercase textColor tracking-wide required-highlight">item details</label>
                                     <textarea
                                         id='description'
                                         name='description'
@@ -248,7 +248,7 @@ function PlaceItem () {
                             </div>
                             <div className="flex flex-row justify-between gap-12">
                                 <div className="flex-auto">
-                                    <label htmlFor="auctioneer_name" className=" text-base uppercase textColor tracking-wide">Auctioneer name</label>
+                                    <label htmlFor="auctioneer_name" className=" text-base uppercase textColor tracking-wide required-highlight">Auctioneer name</label>
                                     <input 
                                         type="text"
                                         id="auctioneer_name"
@@ -259,7 +259,7 @@ function PlaceItem () {
                                     />
                                 </div>
                                 <div className="flex-auto">
-                                    <label htmlFor="auctioneer_contact" className=" text-base uppercase textColor tracking-wide">auctioneer contact</label>
+                                    <label htmlFor="auctioneer_contact" className=" text-base uppercase textColor tracking-wide required-highlight">auctioneer contact</label>
                                     <input 
                                         type="email"
                                         id="auctioneer_contact"
@@ -271,7 +271,7 @@ function PlaceItem () {
                                     {!validEmail && <div className="text-red-500 text-left font-cantora">Enter a valid email.</div>}
                                 </div>
                                 <div className="shrink w-64">
-                                    <label htmlFor="price" className=" text-base uppercase textColor tracking-wide">Starting Bid</label>
+                                    <label htmlFor="price" className=" text-base uppercase textColor tracking-wide required-highlight">Starting Bid</label>
                                     <input 
                                         type="number"
                                         id="price"
@@ -286,7 +286,7 @@ function PlaceItem () {
                             </div>
                             <div className='flex flex-row gap-12'>
                                 <div className="shrink w-64">
-                                    <label htmlFor="auction_date" className=" text-base uppercase textColor tracking-wide">Auction Date</label>
+                                    <label htmlFor="auction_date" className=" text-base uppercase textColor tracking-wide required-highlight">Auction Date</label>
                                     <input 
                                         type="date"
                                         id="auction_date"
@@ -297,7 +297,7 @@ function PlaceItem () {
                                     />
                                 </div>
                                 <div className="shrink w-64">
-                                    <label htmlFor="auction_time" className=" text-base uppercase textColor tracking-wide">Auction Time</label>
+                                    <label htmlFor="auction_time" className=" text-base uppercase textColor tracking-wide required-highlight">Auction Time</label>
                                     <input 
                                         type="time"
                                         id="auction_time"
@@ -310,7 +310,7 @@ function PlaceItem () {
                             </div>
                             <div className='flex flex-row justify-center gap-12'>
                                 <div className='flex-auto'>
-                                    <label htmlFor="product_image1" className=" text-base uppercase textColor tracking-wide">Image 1</label>
+                                    <label htmlFor="product_image1" className=" text-base uppercase textColor tracking-wide required-highlight">Image 1</label>
                                     <input 
                                         type="file"
                                         id="product_image1"
@@ -322,7 +322,7 @@ function PlaceItem () {
                                     />
                                 </div>
                                 <div className='flex-auto'>
-                                    <label htmlFor="product_image2" className=" text-base uppercase textColor tracking-wide">Image 2</label>
+                                    <label htmlFor="product_image2" className=" text-base uppercase textColor tracking-wide required-highlight">Image 2</label>
                                     <input 
                                         type="file"
                                         id="product_image2"
@@ -334,7 +334,7 @@ function PlaceItem () {
                                     />
                                 </div>
                                 <div className='flex-auto'>
-                                    <label htmlFor="product_image3" className=" text-base uppercase textColor tracking-wide">Image 3</label>
+                                    <label htmlFor="product_image3" className=" text-base uppercase textColor tracking-wide required-highlight">Image 3</label>
                                     <input 
                                         type="file"
                                         id="product_image3"
@@ -346,7 +346,7 @@ function PlaceItem () {
                                     />
                                 </div>
                                 <div className='flex-auto'>
-                                    <label htmlFor="product_image4" className=" text-base uppercase textColor tracking-wide cursor-pointer">Image 4</label>
+                                    <label htmlFor="product_image4" className=" text-base uppercase textColor tracking-wide cursor-pointer required-highlight">Image 4</label>
                                     <input 
                                         type="file"
                                         id="product_image4"
@@ -363,7 +363,7 @@ function PlaceItem () {
                             <div className=" uppercase textColor text-lg font-bold font-cantora underline">about artist</div>
                             <div className='flex flex-row justify-between gap-12'>
                                 <div className='flex-auto'>
-                                    <label htmlFor="artist_name" className=" text-base uppercase textColor tracking-wide">Artist Name</label>
+                                    <label htmlFor="artist_name" className=" text-base uppercase textColor tracking-wide required-highlight">Artist Name</label>
                                     <input 
                                         type="text"
                                         id="artist_name"
@@ -374,7 +374,7 @@ function PlaceItem () {
                                     />
                                 </div>
                                 <div className='shrink w-64'>
-                                    <label htmlFor="artist_profile_url" className=" text-base uppercase textColor tracking-wide">Artist Profile</label>
+                                    <label htmlFor="artist_profile_url" className=" text-base uppercase textColor tracking-wide required-highlight">Artist Profile</label>
                                     <input 
                                         type="file"
                                         id="artist_profile_url"
@@ -386,7 +386,7 @@ function PlaceItem () {
                                     />
                                 </div>
                                 <div className='grow'>
-                                    <label htmlFor="artist_short_description" className=" text-base uppercase textColor tracking-wide">Short description about artist</label>
+                                    <label htmlFor="artist_short_description" className=" text-base uppercase textColor tracking-wide required-highlight">Short description about artist</label>
                                     <textarea
                                         id='artist_short_description'
                                         name='artist_short_description'
@@ -401,7 +401,7 @@ function PlaceItem () {
                             </div>
                             <div className='flex flex-row gap-12'>
                                 <div className='flex-auto'>
-                                    <label htmlFor="artist_long_description" className=" text-base uppercase textColor tracking-wide">Artist details</label>
+                                    <label htmlFor="artist_long_description" className=" text-base uppercase textColor tracking-wide required-highlight">Artist details</label>
                                     <textarea
                                         id='artist_long_description'
                                         name='artist_long_description'

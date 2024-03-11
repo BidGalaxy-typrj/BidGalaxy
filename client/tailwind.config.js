@@ -7,6 +7,14 @@ module.exports = {
     extend: {
       fontFamily: {
         cantora: ["Cantora"],
+      },
+      colors: {
+        "side-bar":"#0F2D37",
+        "text":"#FFFFFF",
+        "selected" : "#111F24",
+        "hover-sidebar":"#145369",
+        "tabcolor" : "#69BEE2",
+        "primaryColor":"#C9EDED"
       }
     },
   },

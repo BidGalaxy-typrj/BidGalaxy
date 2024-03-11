@@ -3,6 +3,8 @@ import { IoIosArrowDown } from "react-icons/io";
 
 const Dashboard = () =>{
 
+    document.title = "BidGalaxy | UserDashboard";
+
     const [activityOpen,setActivityOpen] = useState(false)
 
     const [performanceOpen,setPerformanceOpen] = useState(false)
