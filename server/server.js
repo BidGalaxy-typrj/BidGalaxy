@@ -486,7 +486,6 @@ app.get('/user/details/:userId', (req, res) => {
     });
 });
 
-<<<<<<< HEAD
 app.get('/user/upcomingBids/:userId',(req,res)=>{
     const userId = req.params.userId;
     const sql = "SELECT * FROM product_registration WHERE user_id = ?";
@@ -500,7 +499,7 @@ app.get('/user/upcomingBids/:userId',(req,res)=>{
         }
         const productIds = data[0];
         return res.json(productIds);
-=======
+
 //Profile update of user
 app.put('/user/Profile/:userId', (req, res) => {
     const userId = req.params.userId;
@@ -516,7 +515,6 @@ app.put('/user/Profile/:userId', (req, res) => {
         }
         console.log('User profile updated successfully');
         res.sendStatus(200);
->>>>>>> 7fa9a8dc0d25a10ccd635b29c764b9dd9d8391d3
     });
 });
 
