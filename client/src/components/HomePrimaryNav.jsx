@@ -49,7 +49,9 @@ function HomeNav() {
     document.title === "BidGalaxy | AuctionedItems" ||
     document.title === "BidGalaxy | AuctionedItemDetails" ||
     document.title === "BidGalaxy | AddBuyerDetails";
-  const UserDashboard = document.title === "BidGalaxy | UserDashboard";
+  const UserDashboard = 
+    document.title === "BidGalaxy | UserDashboard" ||
+    document.title === "BidGalaxy | Profile";
   return (
     <nav className="relative primaryNavBg">
       <div className="primaryNav flex flex-row justify-between items-center mx-[100px]">

@@ -1,7 +1,12 @@
-import React, { useState, useRef } from "react";
+import axios from "axios";
+import React, { useState, useRef, useEffect } from "react";
 import { HiUser } from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
+
 
 const Profile = () => {
+
+    document.title = "BidGalaxy | Profile";
 
     const inputRef = useRef(null)
     const [image,setImage] = useState("");

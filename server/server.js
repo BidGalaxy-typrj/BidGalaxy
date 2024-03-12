@@ -9,6 +9,7 @@ import bodyParser from "body-parser";
 import multer from "multer";
 import nodemailer from 'nodemailer';
 import Randomstring from "randomstring";
+require('dotenv').config();
 
 
 const salt = 10;
@@ -40,8 +41,8 @@ const db = mysql.createConnection({
     database : "bidgalaxy"
 });
 
-const SMTP_MAIL = "bidgalaxy.official@gmail.com"
-const SMTP_PASS = "xkjf hgwq azxw csam"
+const SMTP_MAIL = process.env.SMTP_MAIL;
+const SMTP_PASS = process.env.SMTP_PASS;
 
 const sendMail = async(email, mailSubject, content) => {
     try {
@@ -101,13 +102,13 @@ app.get('/user/Sidebar', (req, res) => {
 })
 
 //Sending user_id of user on registration using session
-app.get('/signup/ProfileSection', (req, res) => {
-    if(req.session.userId) {
-        return res.json({valid : true, userId : req.session.userId})
-    } else {
-        return res.json({valid : false})
-    }
-});
+// app.get('/signup/ProfileSection', (req, res) => {
+//     if(req.session.userId) {
+//         return res.json({valid : true, userId : req.session.userId})
+//     } else {
+//         return res.json({valid : false})
+//     }
+// });
 
 app.post('/signup/index', (req, res) => {
     // Check if username already exists
@@ -189,7 +190,7 @@ app.post('/signin/index', (req, res) => {
                 }
             });
         } else {
-            return res.json({ Error: "Invalid Email or Password" });
+            return res.json({ Error: "Invalid Username or Password" });
         }
     });
 });
@@ -490,7 +491,6 @@ app.get('/user/details/:userId', (req, res) => {
 app.put('/user/Profile/:userId', (req, res) => {
     const userId = req.params.userId;
     const formData = req.body;
-    console.log(formData);
 
     const query = 'UPDATE user_details SET first_name = ?, middle_name = ?, last_name = ?, contact_number = ?, gender = ?, street_address1 = ?, street_address2 = ?, city = ?, state = ?, postal_code = ?, country = ?, modified_timestamp = NOW() WHERE user_id = ?';
 
@@ -503,6 +503,10 @@ app.put('/user/Profile/:userId', (req, res) => {
         res.sendStatus(200);
     });
 });
+
+app.get('/user/ProfileDetails/:userId', (req, res) => {
+    const userId = req.params.userId;
+})
 
 app.listen(8081, () => {
     console.log("Server is Running...");
