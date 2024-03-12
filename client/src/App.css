@@ -352,3 +352,7 @@ label.required-highlight:after {
   content: ' *';
   color: red;
 }
+
+.ProfileSection_labels {
+  margin: auto 0;
+}

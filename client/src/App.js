@@ -23,6 +23,8 @@ import UpcomingBids from './user/UpcomingBids';
 import OngoingBids from './user/OngoingBids';
 import Profile from './user/Profile';
 import Auction from './user/Auction';
+import Verification from './signup/Verification';
+import ProfileSection from './signup/ProfileSection';
 
 
 
@@ -35,6 +37,7 @@ function App() {
             <Route path='/signup/index' element={<Signup />} />
             <Route path='/signin/index' element={<Signin />} />
             <Route path='/signup/Success' element={<Success />} />
+            <Route path='/signup/Verification' element = {<Verification />} />
             <Route path='/admin/Index' element= {<AdminDash />} />
             <Route path='/admin/Sidebar' element = {<SideBar />} />
             <Route path='/admin/PlaceItem' element= {<PlaceItem />} />
@@ -53,6 +56,7 @@ function App() {
             <Route path='/user/OngoingBids' element = {<OngoingBids />} />
             <Route path='/user/Profile' element = {<Profile />} />
             <Route path='/user/Auction' element = {<Auction />} />
+            <Route path='/signup/ProfileSection' element = {<ProfileSection />} />
          </Routes>
     );
   }
