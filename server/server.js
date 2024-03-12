@@ -499,6 +499,8 @@ app.get('/user/upcomingBids/:userId',(req,res)=>{
         }
         const productIds = data[0];
         return res.json(productIds);
+    }
+};
 
 //Profile update of user
 app.put('/user/Profile/:userId', (req, res) => {
