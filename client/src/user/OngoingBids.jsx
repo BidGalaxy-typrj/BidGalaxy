@@ -1,7 +1,7 @@
 import React from "react";
 import {  HiTicket } from "react-icons/hi";
 
-const OngoingBids = ()=>{
+function OngoingBids ({userId}) {
 
     const itemImage = "";
     const date = "03/03/2024";

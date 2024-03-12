@@ -31,6 +31,7 @@ const SideBar = () => {
     setOngoingBidsOpen(false);
   };
 
+  const [userId, setUserId] = useState(null);
   const [username, setUsername] = useState(null);
 
   const navigate = useNavigate();
@@ -41,6 +42,7 @@ const SideBar = () => {
         if(res.data.valid) {
             axios.get(`http://localhost:8081/user/details/${res.data.userId}`)
             .then(userRes => {
+                setUserId(res.data.userId);
                 setUsername(userRes.data.username);
             })
             .catch(err => console.log("Error fetching user details:", err));
@@ -212,7 +214,7 @@ const SideBar = () => {
             open ? "w-3/4 my-20" : "w-full"
           }`}
         >
-          <Profile />
+          <Profile userId={userId} />
         </div>
 
         <div
@@ -220,7 +222,7 @@ const SideBar = () => {
             open ? "w-3/4" : "w-full"
           }`}
         >
-          <UpcomingBids />
+          <UpcomingBids userId={userId} />
         </div>
 
         <div
@@ -228,7 +230,7 @@ const SideBar = () => {
             open ? "w-3/4" : "w-full"
           }`}
         >
-          <OngoingBids />
+          <OngoingBids userId={userId} />
         </div>
       </div>
       <Footer />

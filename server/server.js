@@ -104,13 +104,13 @@ app.get('/user/Sidebar', (req, res) => {
 })
 
 //Sending user_id of user on registration using session
-app.get('/signup/ProfileSection', (req, res) => {
-    if(req.session.userId) {
-        return res.json({valid : true, userId : req.session.userId})
-    } else {
-        return res.json({valid : false})
-    }
-});
+// app.get('/signup/ProfileSection', (req, res) => {
+//     if(req.session.userId) {
+//         return res.json({valid : true, userId : req.session.userId})
+//     } else {
+//         return res.json({valid : false})
+//     }
+// });
 
 app.post('/signup/index', (req, res) => {
     // Check if username already exists
@@ -520,6 +520,26 @@ app.put('/user/Profile/:userId', (req, res) => {
         }
         console.log('User profile updated successfully');
         res.sendStatus(200);
+    });
+});
+
+//Fetching data from user_details table
+app.get('/user/user_details/:userId', (req, res) => {
+    const userId = req.params.userId;
+
+    // Example: Query the database to get user details based on user ID
+    db.query('SELECT * FROM user_details WHERE user_id = ?', [userId], (err, results) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+            if (results.length > 0) {
+                const userDetails = results[0]; // Assuming only one user will be returned
+                res.json(userDetails);
+            } else {
+                res.status(404).json({ error: 'User not found' });
+            }
+        }
     });
 });
 

@@ -3,12 +3,12 @@ import {  HiTicket } from "react-icons/hi";
 import queryString from 'query-string';
 import axios from 'axios';
 
-const UpcomingBids = ()=>{
+function UpcomingBids ({userId}) {
 
     document.title = "BidGalaxy | UpcomingBids";
 
+    // eslint-disable-next-line
     const [registeredBids, setRegisteredBids] = useState(null);
-
     useEffect(() => {
         // Parse the query string to get the user ID
         const { q: userId } = queryString.parse(window.location.search);
