@@ -422,6 +422,22 @@ app.get('/user/details/:userId', (req, res) => {
     });
 });
 
+app.get('/user/upcomingBids/:userId',(req,res)=>{
+    const userId = req.params.userId;
+    const sql = "SELECT * FROM product_registration WHERE user_id = ?";
+    db.query(sql,[userId],(err,data)=>{
+        if(err){
+            console.log("Error fetching product Ids",err);
+            return res.status(500).json({Error:"Error in Fetching product Ids"});
+        }
+        if(data.length === 0){
+            return res.status(404).json({Error:"Product Not Found"});
+        }
+        const productIds = data[0];
+        return res.json(productIds);
+    });
+});
+
 app.listen(8081, () => {
     console.log("Server is Running...");
 })
