@@ -7,6 +7,8 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import bodyParser from "body-parser";
 import multer from "multer";
+import nodemailer from 'nodemailer';
+import Randomstring from "randomstring";
 
 
 const salt = 10;
@@ -36,7 +38,49 @@ const db = mysql.createConnection({
     user : "root",
     password : "",
     database : "bidgalaxy"
-})
+});
+
+const SMTP_MAIL = "bidgalaxy.official@gmail.com"
+const SMTP_PASS = "xkjf hgwq azxw csam"
+
+const sendMail = async(email, mailSubject, content) => {
+    try {
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: '587',
+            secure: false,
+            requireTLS: true,
+            auth: {
+              user: SMTP_MAIL,
+              pass: SMTP_PASS
+            }
+        });
+
+        const mailOption1 = {
+            from: SMTP_MAIL,
+            to: email,
+            subject: mailSubject,
+            html: content
+        }
+
+        // const mailOption2 = {
+        //     from: email,
+        //     to: SMTP_MAIL,
+        //     subject: mailSubject,
+        //     html: content
+        // }
+
+        transporter.sendMail(mailOption1, function(error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log("Mail sent Successfully : ", info.response);
+            }
+        })
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 //sending userId of admin using session
 app.get('/admin/Sidebar', (req, res) => {
@@ -55,6 +99,15 @@ app.get('/user/Sidebar', (req, res) => {
         return res.json({valid : false})
     }
 })
+
+//Sending user_id of user on registration using session
+app.get('/signup/ProfileSection', (req, res) => {
+    if(req.session.userId) {
+        return res.json({valid : true, userId : req.session.userId})
+    } else {
+        return res.json({valid : false})
+    }
+});
 
 app.post('/signup/index', (req, res) => {
     // Check if username already exists
@@ -77,10 +130,12 @@ app.post('/signup/index', (req, res) => {
                 } else {
                     bcrypt.hash(req.body.password.toString(), salt, (err, hash) => {
                         if (err) return res.json({ Error: "Error for hashing password" });
+
+                        const randomToken = Randomstring.generate();
                         
                         //Insert into users table
-                        const insertUserQuery = "INSERT INTO users (username, email_address, password) VALUES (?, ?, ?)";
-                        const values = [req.body.username, req.body.email, hash];
+                        const insertUserQuery = "INSERT INTO users (username, email_address, password, token) VALUES (?, ?, ?, ?)";
+                        const values = [req.body.username, req.body.email, hash, randomToken];
                         
                         db.query(insertUserQuery, values, (err, result) => {
                             if (err) return res.json({ Error: "Error while registering. Please try again later." });
@@ -92,6 +147,14 @@ app.post('/signup/index', (req, res) => {
                             const userDetailsValues = [user_id, req.body.email];
                             db.query(insertUserDetailsQuery, userDetailsValues, (err) => {
                                 if (err) return res.json({ Error: "Error while inserting user details" });
+
+                                let mailSubject = "Email Verification";
+                                let content = '<p>Hello '+req.body.username+', Please verify your email by clicking <a href="http://localhost:3000/signup/ProfileSection?q='+randomToken+'&r='+user_id+'">here</a>.</p>';
+                                sendMail(req.body.email, mailSubject, content)
+
+                                // req.session.userId = user_id;
+
+                                // console.log(user_id);
 
                                 return res.json({ Status: "Success" });
                             });
@@ -285,7 +348,7 @@ app.put('/admin/AuctionItems/EnableDisable/:id', (req, res) => {
         console.log('Invalid value for disabled column');
         return res.status(400).json({ error: 'Invalid value for disabled column' });
     }
-    const query = 'UPDATE products SET disabled = ? WHERE id = ?';
+    const query = 'UPDATE products SET disabled = ?, modified_timestamp = NOW() WHERE id = ?';
     db.query(query, [disabled, id], (err, result) => {
         if (err) {
             console.error('Error updating product:', err);
@@ -301,7 +364,7 @@ app.put('/admin/AuctionItems/Delete/:id', (req, res) => {
     const { id } = req.params;
     // const { disabled } = req.body;
 
-    const query = 'UPDATE products SET deleted = ? WHERE id = ?';
+    const query = 'UPDATE products SET deleted = ?, deleted_timestamp = NOW() WHERE id = ?';
     db.query(query, ['1', id], (err, result) => {
         if (err) {
             console.error('Error updating product:', err);
@@ -347,6 +410,7 @@ app.post('/admin/BuyerDetails', (req, res) => {
     });
 })
 
+//We are getting auctioned item details
 app.get('/admin/AuctionedItemDetails/:id', (req, res) => {
     const id = req.params.id;
 
@@ -419,6 +483,24 @@ app.get('/user/details/:userId', (req, res) => {
         }
         const userDetails = data[0]; // Assuming the query returns only one user
         return res.json(userDetails);
+    });
+});
+
+//Profile update of user
+app.put('/user/Profile/:userId', (req, res) => {
+    const userId = req.params.userId;
+    const formData = req.body;
+    console.log(formData);
+
+    const query = 'UPDATE user_details SET first_name = ?, middle_name = ?, last_name = ?, contact_number = ?, gender = ?, street_address1 = ?, street_address2 = ?, city = ?, state = ?, postal_code = ?, country = ?, modified_timestamp = NOW() WHERE user_id = ?';
+
+    db.query(query, [formData.first_name, formData.middle_name, formData.last_name, formData.contact_number, formData.gender, formData.street_address1, formData.street_address2, formData.city, formData.state, formData.postal_code, formData.country, userId], (err, result) => {
+        if (err) {
+            console.error('Error updating user profile:', err);
+            return res.status(500).json({ error: 'Error updating user profile' });
+        }
+        console.log('User profile updated successfully');
+        res.sendStatus(200);
     });
 });
 

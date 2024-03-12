@@ -26,7 +26,7 @@ function Signup() {
     axios.post('http://localhost:8081/signup/index', values)
     .then(res => {
       if (res.data.Status === "Success") {
-        navigate('/signup/Success')
+        navigate('/signup/Verification');
       } else {
         if (res.data.Error === "Username already exists") {
           alert("Username already exists");
