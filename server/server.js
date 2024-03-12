@@ -487,6 +487,21 @@ app.get('/user/details/:userId', (req, res) => {
     });
 });
 
+<<<<<<< HEAD
+app.get('/user/upcomingBids/:userId',(req,res)=>{
+    const userId = req.params.userId;
+    const sql = "SELECT * FROM product_registration WHERE user_id = ?";
+    db.query(sql,[userId],(err,data)=>{
+        if(err){
+            console.log("Error fetching product Ids",err);
+            return res.status(500).json({Error:"Error in Fetching product Ids"});
+        }
+        if(data.length === 0){
+            return res.status(404).json({Error:"Product Not Found"});
+        }
+        const productIds = data[0];
+        return res.json(productIds);
+=======
 //Profile update of user
 app.put('/user/Profile/:userId', (req, res) => {
     const userId = req.params.userId;
@@ -501,6 +516,7 @@ app.put('/user/Profile/:userId', (req, res) => {
         }
         console.log('User profile updated successfully');
         res.sendStatus(200);
+>>>>>>> 7fa9a8dc0d25a10ccd635b29c764b9dd9d8391d3
     });
 });
 

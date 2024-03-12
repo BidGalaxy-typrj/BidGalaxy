@@ -1,7 +1,34 @@
-import React from "react";
+import {React, useEffect, useState} from "react";
 import {  HiTicket } from "react-icons/hi";
+import queryString from 'query-string';
+import axios from 'axios';
 
 const UpcomingBids = ()=>{
+
+    document.title = "BidGalaxy | UpcomingBids";
+
+    const [registeredBids, setRegisteredBids] = useState(null);
+
+    useEffect(() => {
+        // Parse the query string to get the user ID
+        const { q: userId } = queryString.parse(window.location.search);
+        console.log(userId);
+
+        // Fetch user details using the user ID
+        fetchUserDetails(userId);
+    }, []);
+
+    const fetchUserDetails = (userId) => {
+        // Make API call to fetch user details based on the user ID
+        axios.get(`http://localhost:8081/user/upcomingBids/${userId}`)
+            .then((res) => {
+                console.log('Fetched User Details:', res.data);
+                setRegisteredBids(res.data);
+            })
+            .catch((err) => {
+                console.error('Error fetching user details:', err);
+            });
+    };
 
     const itemImage = "";
     const date = "03/03/2024";
