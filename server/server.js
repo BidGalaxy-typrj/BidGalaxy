@@ -9,6 +9,7 @@ import bodyParser from "body-parser";
 import multer from "multer";
 import nodemailer from 'nodemailer';
 import Randomstring from "randomstring";
+import dotenv from 'dotenv';
 
 
 const salt = 10;
@@ -40,8 +41,10 @@ const db = mysql.createConnection({
     database : "bidgalaxy"
 });
 
-const SMTP_MAIL = "bidgalaxy.official@gmail.com"
-const SMTP_PASS = "xkjf hgwq azxw csam"
+dotenv.config();
+
+const smtp_mail = process.env.SMTP_MAIL;
+const smtp_pass = process.env.SMTP_PASS;
 
 const sendMail = async(email, mailSubject, content) => {
     try {
@@ -51,13 +54,13 @@ const sendMail = async(email, mailSubject, content) => {
             secure: false,
             requireTLS: true,
             auth: {
-              user: SMTP_MAIL,
-              pass: SMTP_PASS
+              user: smtp_mail,
+              pass: smtp_pass
             }
         });
 
         const mailOption1 = {
-            from: SMTP_MAIL,
+            from: smtp_mail,
             to: email,
             subject: mailSubject,
             html: content
