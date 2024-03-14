@@ -226,7 +226,8 @@ app.get('/admin/details/:userId', (req, res) => {
     });
 });
 
-const storage = multer.diskStorage({
+//Storage and directory declaration for product image to be stored
+const storageForProduct = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, '../client/src/assets/auctionItemImages/');
     },
@@ -236,7 +237,7 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storageForProduct });
 
 app.post('/admin/PlaceItem', upload.fields([
     { name: 'product_image1', maxCount: 1 },
@@ -505,11 +506,11 @@ app.get('/user/upcomingBids/:userId',(req,res)=>{
     });
 });
 
-//Profile update of user
+//Profile update of user at register
 app.put('/user/Profile/:userId', (req, res) => {
     const userId = req.params.userId;
     const formData = req.body;
-    console.log(formData);
+    // console.log(formData);
 
     const query = 'UPDATE user_details SET first_name = ?, middle_name = ?, last_name = ?, contact_number = ?, gender = ?, street_address1 = ?, street_address2 = ?, city = ?, state = ?, postal_code = ?, country = ?, modified_timestamp = NOW() WHERE user_id = ?';
 
@@ -539,6 +540,108 @@ app.get('/user/user_details/:userId', (req, res) => {
             } else {
                 res.status(404).json({ error: 'User not found' });
             }
+        }
+    });
+});
+
+//Storage and directory declaration for product image to be stored
+const storageForUser = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, '../client/src/assets/userProfile/');
+    },
+    filename: function (req, file, cb) {
+        // Use the original filename provided by the client
+        cb(null, file.originalname);
+    }
+});
+
+const uploadProfileImage = multer({ storage: storageForUser });
+
+//Updating user profile in user section
+// app.put('/user/user_profile/:userId', uploadProfileImage.fields([{ name: 'profile_url', maxCount: 1 }]), (req, res) => {
+//     const userId = req.params.userId;
+//     const formData = req.body;
+
+//     formData.profile_url = req.files['profile_url'][0].path;
+
+//     const query = 'UPDATE user_details SET first_name = ?, middle_name = ?, last_name = ?, contact_number = ?, user_profile = ?, gender = ?, street_address1 = ?, street_address2 = ?, city = ?, state = ?, postal_code = ?, country = ?, modified_timestamp = NOW() WHERE user_id = ?';
+
+//     db.query(query, [formData.first_name, formData.middle_name, formData.last_name, formData.contact_number, formData.profile_url, formData.gender, formData.street_address1, formData.street_address2, formData.city, formData.state, formData.postal_code, formData.country, userId], (err, result) => {
+//         if (err) {
+//             console.error('Error updating user profile:', err);
+//             return res.status(500).json({ error: 'Error updating user profile' });
+//         }
+//         console.log('User profile updated successfully');
+//         res.sendStatus(200);
+//     });
+// });
+
+//Updating user profile in user section
+app.put('/user/user_profile/:userId', uploadProfileImage.fields([{ name: 'profile_url', maxCount: 1 }]), (req, res) => {
+    const userId = req.params.userId;
+    const formData = req.body;
+
+    // Fetch user details from the database
+    db.query('SELECT * FROM user_details WHERE user_id = ?', [userId], (err, result) => {
+        if (err) {
+            console.error('Error fetching user details:', err);
+            return res.status(500).json({ error: 'Error fetching user details' });
+        }
+
+        if (result.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const userDetails = result[0];
+
+        // Initialize an object to store the updated fields
+        const updatedFields = {};
+
+        // Iterate over the keys in formData to check for modified fields
+        Object.keys(formData).forEach(key => {
+            // Check if the key exists in userDetails
+            if (userDetails.hasOwnProperty(key)) {
+                // If the value is different, update the field
+                if (userDetails[key] !== formData[key]) {
+                    updatedFields[key] = formData[key];
+                }
+            }
+        });
+
+        // If profile_url is provided, update it in the database
+        if (req.files['profile_url'] && req.files['profile_url'][0].path) {
+            updatedFields['profile_url'] = req.files['profile_url'][0].path;
+        }
+
+        // If there are updated fields, construct the SQL query dynamically
+        if (Object.keys(updatedFields).length > 0) {
+            let query = 'UPDATE user_details SET ';
+            const values = [];
+
+            Object.keys(updatedFields).forEach((key, index) => {
+                query += `${key} = ?, `;
+                values.push(updatedFields[key]);
+            });
+
+            // Remove the trailing comma and space from the query
+            query = query.slice(0, -2);
+
+            query += ' WHERE user_id = ?';
+            values.push(userId);
+
+            // Execute the SQL query with the updated values
+            db.query(query, values, (err, result) => {
+                if (err) {
+                    console.error('Error updating user profile:', err);
+                    return res.status(500).json({ error: 'Error updating user profile' });
+                }
+                console.log('User profile updated successfully');
+                res.sendStatus(200);
+            });
+        } else {
+            // If no fields are modified, send a response indicating no changes were made
+            console.log('No fields to update');
+            res.status(200).json({ message: 'No fields to update' });
         }
     });
 });
