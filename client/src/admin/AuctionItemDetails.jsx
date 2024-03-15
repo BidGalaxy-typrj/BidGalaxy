@@ -5,6 +5,7 @@ import axios from "axios";
 import React from "react";
 import Slider from "react-slick";
 import { IoIosArrowDroprightCircle, IoIosArrowDropleftCircle } from "react-icons/io";
+import { FaRupeeSign } from "react-icons/fa";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 
@@ -248,11 +249,11 @@ function AuctionItemDetails() {
         </div>
         <div className="mb-4">
           <div className="textColor text-xl font-cantora uppercase font-bold">auctioneer contact</div>
-          <div className="text-gray-700 font-cantora text-base uppercase mt-2">{itemDetails.auctioneer_contact || 'NA'}</div>
+          <div className="text-gray-700 font-cantora text-base mt-2">{itemDetails.auctioneer_contact || 'NA'}</div>
         </div>
         <div className="mb-4">
           <div className="textColor text-xl font-cantora uppercase font-bold">starting bid</div>
-          <div className="text-gray-700 font-cantora text-base uppercase mt-2">{itemDetails.price || 'NA'}</div>
+          <div className="text-gray-700 font-cantora text-base uppercase mt-2"><FaRupeeSign className="h-3.5 w-3.5" />{itemDetails.price || 'NA'} /-</div>
         </div>
         <div className="mb-4">
           <div className="textColor text-xl font-cantora uppercase font-bold">auction date and time</div>

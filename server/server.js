@@ -10,12 +10,15 @@ import multer from "multer";
 import nodemailer from 'nodemailer';
 import Randomstring from "randomstring";
 import dotenv from 'dotenv';
+import Razorpay from 'razorpay';
+import crypto from 'crypto';
 
 
 const salt = 10;
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({extended : false}));
 app.use(cors({
     origin : ["http://localhost:3000"],
     methods : ["POST", "GET", "PUT"],
@@ -558,25 +561,6 @@ const storageForUser = multer.diskStorage({
 const uploadProfileImage = multer({ storage: storageForUser });
 
 //Updating user profile in user section
-// app.put('/user/user_profile/:userId', uploadProfileImage.fields([{ name: 'profile_url', maxCount: 1 }]), (req, res) => {
-//     const userId = req.params.userId;
-//     const formData = req.body;
-
-//     formData.profile_url = req.files['profile_url'][0].path;
-
-//     const query = 'UPDATE user_details SET first_name = ?, middle_name = ?, last_name = ?, contact_number = ?, user_profile = ?, gender = ?, street_address1 = ?, street_address2 = ?, city = ?, state = ?, postal_code = ?, country = ?, modified_timestamp = NOW() WHERE user_id = ?';
-
-//     db.query(query, [formData.first_name, formData.middle_name, formData.last_name, formData.contact_number, formData.profile_url, formData.gender, formData.street_address1, formData.street_address2, formData.city, formData.state, formData.postal_code, formData.country, userId], (err, result) => {
-//         if (err) {
-//             console.error('Error updating user profile:', err);
-//             return res.status(500).json({ error: 'Error updating user profile' });
-//         }
-//         console.log('User profile updated successfully');
-//         res.sendStatus(200);
-//     });
-// });
-
-//Updating user profile in user section
 app.put('/user/user_profile/:userId', uploadProfileImage.fields([{ name: 'profile_url', maxCount: 1 }]), (req, res) => {
     const userId = req.params.userId;
     const formData = req.body;
@@ -643,6 +627,119 @@ app.put('/user/user_profile/:userId', uploadProfileImage.fields([{ name: 'profil
             console.log('No fields to update');
             res.status(200).json({ message: 'No fields to update' });
         }
+    });
+});
+
+//Razorpay integration for registering for an item
+app.post('/create/orderId', async (req, res) => {
+
+    try {
+        const razorpay = new Razorpay({
+            key_id: process.env.RAZORPAY_ID_KEY,
+            key_secret: process.env.RAZORPAY_SECRET_KEY,
+        });
+
+        const options = req.body;
+        const order = await razorpay.orders.create(options);
+
+        if(!order) {
+            return res.status(500).send("Error");
+        }
+
+        res.status(200).json(order);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send("Error");
+    }
+});
+
+//To check whether the transaction is valid or not
+app.post('/order/validate', async (req, res) => {
+    try {
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+
+        const sha = crypto.createHmac("sha256", process.env.RAZORPAY_SECRET_KEY);
+        sha.update(`${razorpay_order_id}|${razorpay_payment_id}`);
+        const digest = sha.digest("hex");
+
+        if (digest !== razorpay_signature) {
+            return res.status(400).json({ msg: "Transaction is not legit!" });
+        }
+
+        // Validation successful, send success response
+        return res.status(200).json({
+            msg: "Success",
+            orderId: razorpay_order_id,
+            paymentId: razorpay_payment_id
+        });
+    } catch (error) {
+        console.error("Error validating payment:", error);
+        return res.status(500).json({ msg: "Internal server error" });
+    }
+});
+
+//Product Registration by user data insertion into table
+app.post('/user/product_registration/:productId/:userId', (req, res) => {
+    const userId = req.params.userId;
+    const productId = req.params.productId;
+
+    // Fetch user email and name from the users table
+    const userQuery = "SELECT email_address, username FROM users WHERE user_id = ?";
+    db.query(userQuery, [userId], (userErr, userResult) => {
+        if (userErr) {
+            console.error('Error while fetching user information:', userErr);
+            return res.status(500).json({ error: 'Error while fetching user information. Try again later.' });
+        }
+
+        if (userResult.length === 0) {
+            console.error('User not found');
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const userEmail = userResult[0].email_address;
+        const userName = userResult[0].username;
+
+        // Fetch product title and artist name from the products table
+        const productQuery = "SELECT title, artist_name FROM products WHERE id = ?";
+        db.query(productQuery, [productId], (productErr, productResult) => {
+            if (productErr) {
+                console.error('Error while fetching product information:', productErr);
+                return res.status(500).json({ error: 'Error while fetching product information. Try again later.' });
+            }
+
+            if (productResult.length === 0) {
+                console.error('Product not found');
+                return res.status(404).json({ error: 'Product not found' });
+            }
+
+            const productTitle = productResult[0].title;
+            const artistName = productResult[0].artist_name;
+
+            // Construct email content
+            const mailSubject = "Product Registration Successful!";
+            const content = `<h3>Dear ${userName},</h3>\n\nYou have successfully registered for <b>${productTitle}</b> by <b>${artistName}</b>.\n\nThank you for registering.<br/>You will receive a confirmation mail containing the meeting link and details within 1 to 2 working days.<br/>Best regards,<br/><b>BidGalaxy Team.</b>`;
+
+            // Insert into product_registration table
+            const registrationQuery = "INSERT INTO product_registration (product_id, user_id) VALUES (?, ?)";
+            db.query(registrationQuery, [productId, userId], (regErr, regResult) => {
+                if (regErr) {
+                    console.error('Error while registering product:', regErr);
+                    return res.status(500).json({ error: 'Error while registering product. Try again later.' });
+                }
+
+                console.log('Product registered successfully');
+
+                // Send email
+                sendMail(userEmail, mailSubject, content)
+                    .then(() => {
+                        res.sendStatus(200);
+                    })
+                    .catch((mailErr) => {
+                        console.error('Error while sending email:', mailErr);
+                        res.status(500).json({ error: 'Error while sending email. Try again later.' });
+                    });
+            });
+        });
     });
 });
 

@@ -206,7 +206,7 @@ const SideBar = () => {
             open ? "w-3/4" : "w-full"
           }`}
         >
-          <Auction />
+          <Auction userId={userId} />
         </div>
 
         <div

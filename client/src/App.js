@@ -25,6 +25,8 @@ import Profile from './user/Profile';
 import Auction from './user/Auction';
 import Verification from './signup/Verification';
 import ProfileSection from './signup/ProfileSection';
+import AuctionDetails from './user/AuctionDetails';
+import PaymentSuccess from './user/PaymentSuccess';
 
 
 
@@ -57,6 +59,8 @@ function App() {
             <Route path='/user/Profile' element = {<Profile />} />
             <Route path='/user/Auction' element = {<Auction />} />
             <Route path='/signup/ProfileSection' element = {<ProfileSection />} />
+            <Route path='/user/AuctionDetails' element = {<AuctionDetails />} />
+            <Route path='/user/PaymentSuccess' element = {<PaymentSuccess />} />
          </Routes>
     );
   }
