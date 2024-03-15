@@ -428,8 +428,8 @@ app.get('/admin/AuctionedItemDetails/:id', (req, res) => {
             res.status(500).json({ error: 'Internal Server Error' });
         } else {
             if (results.length > 0) {
-                const itemDetails = results[0]; // Assuming only one user will be returned
-                res.json(itemDetails);
+                const userDetails = results[0]; // Assuming only one user will be returned
+                res.json(userDetails);
             } else {
                 res.status(404).json({ error: 'User not found' });
             }
@@ -493,21 +493,21 @@ app.get('/user/details/:userId', (req, res) => {
     });
 });
 
-app.get('/user/upcomingBids/:userId',(req,res)=>{
-    const userId = req.params.userId;
-    const sql = "SELECT * FROM product_registration WHERE user_id = ?";
-    db.query(sql,[userId],(err,data)=>{
-        if(err){
-            console.log("Error fetching product Ids",err);
-            return res.status(500).json({Error:"Error in Fetching product Ids"});
-        }
-        if(data.length === 0){
-            return res.status(404).json({Error:"Product Not Found"});
-        }
-        const productIds = data[0];
-        return res.json(productIds);
-    });
-});
+// app.get('/user/upcomingBids/:userId',(req,res)=>{
+//     const userId = req.params.userId;
+//     const sql = "SELECT * FROM product_registration WHERE user_id = ?";
+//     db.query(sql,[userId],(err,data)=>{
+//         if(err){
+//             console.log("Error fetching product Ids",err);
+//             return res.status(500).json({Error:"Error in Fetching product Ids"});
+//         }
+//         if(data.length === 0){
+//             return res.status(404).json({Error:"Product Not Found"});
+//         }
+//         const productIds = data[0];
+//         return res.json(productIds);
+//     });
+// });
 
 //Profile update of user at register
 app.put('/user/Profile/:userId', (req, res) => {
@@ -739,6 +739,41 @@ app.post('/user/product_registration/:productId/:userId', (req, res) => {
                         res.status(500).json({ error: 'Error while sending email. Try again later.' });
                     });
             });
+        });
+    });
+});
+
+//getting product based on user_id
+app.get('/user/product_details/:userId', (req, res) => {
+    const userId = req.params.userId;
+
+    const query = "SELECT product_id FROM product_registration WHERE user_id = ?";
+    db.query(query, [userId], (err, results) => {
+        if (err) {
+            console.error('Error while fetching product_ids:', err);
+            return res.status(500).json({ error: 'Error while fetching product ids. Try again later.' });
+        }
+
+        if (results.length === 0) {
+            console.error('No product ids found for the user');
+            return res.status(404).json({ error: 'No products found for the user' });
+        }
+
+        const productIds = results.map(result => result.product_id);
+
+        const productQuery = "SELECT * FROM products WHERE id IN (?)";
+        db.query(productQuery, [productIds], (productErr, productResults) => {
+            if (productErr) {
+                console.error('Error while fetching product information:', productErr);
+                return res.status(500).json({ error: 'Error while fetching product information. Try again later.' });
+            }
+
+            if (productResults.length === 0) {
+                console.error('No products found with the given product_ids');
+                return res.status(404).json({ error: 'No products found with the given product_ids' });
+            }
+
+            res.json(productResults);
         });
     });
 });

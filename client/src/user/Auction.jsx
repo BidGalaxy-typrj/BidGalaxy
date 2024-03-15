@@ -18,23 +18,26 @@ function Auction ({userId}) {
     const fetchAuctionItems = () => {
         axios.get('http://localhost:8081/admin/AuctionItems')
         .then((res) => {
-            // console.log('Fetched Products:', res.data);
-            const modifiedItems = res.data.map(item => {
-                if (item.product_image1) {
-                    item.product_image1 = item.product_image1
-                        .replace(/\\/g, '/')  // Convert single backslashes to forward slashes
-                        .replace(/^\.\.\/client\/src\//, '');
-                }
-                const dateString = item.auction_date;
-                const date = new Date(dateString);
-                const options = { month: 'long', day: 'numeric', year: 'numeric' };
-                const formattedDate = date.toLocaleDateString('en-US', options);
-                item.auction_date = formattedDate;
-                return item;
-            });
-            setItems(modifiedItems);
+            if (Array.isArray(res.data)) {
+                const modifiedItems = res.data.map(item => {
+                    if (item.product_image1) {
+                        item.product_image1 = item.product_image1
+                            .replace(/\\/g, '/')  // Convert single backslashes to forward slashes
+                            .replace(/^\.\.\/client\/src\//, '');
+                    }
+                    const dateString = item.auction_date;
+                    const date = new Date(dateString);
+                    const options = { month: 'long', day: 'numeric', year: 'numeric' };
+                    const formattedDate = date.toLocaleDateString('en-US', options);
+                    item.auction_date = formattedDate;
+                    return item;
+                });
+                setItems(modifiedItems);
+            } else {
+                console.error("Response data is not an array:", res.data);
+            }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.error("Error fetching item details:", err));
     };
 
     function classNames(...classes) {
@@ -49,6 +52,20 @@ function Auction ({userId}) {
 
     return (
         <div className="wrapper">
+            <div className="mt-10 float-end me-10 shadow-lg">
+                <form class="w-[20rem] mx-auto">   
+                    <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white ">GO</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                            </svg>
+                        </div>
+                        <input type="search" id="default-search" class="block w-full p-4 ps-10 text-sm font-cantora text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-[#0F2D37] focus:border-[#0F2D37] dark:bg-white dark:border-white dark:placeholder-textColor dark:text-gray-900" placeholder="Search Item Names..." required />
+                        <button type="submit" class="text-white absolute end-2.5 bottom-2.5 bg-[#0F2D37] hover:bg-[#1a4857]  font-medium rounded-lg text-sm px-4 py-2 font-cantora">GO</button>
+                    </div>
+                </form>
+            </div>
             <div className="w-full flex flex-row justify-center items-center flex-wrap p-10">
                 <div className=" flex flex-row justify-start items-start gap-7">
                     {items.map((item, index) => (
