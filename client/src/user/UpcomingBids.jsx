@@ -16,6 +16,14 @@ function UpcomingBids ({userId}) {
         }
     }, [userId]);
 
+<<<<<<< HEAD
+        // Fetch user details using the user ID
+        fetchUserDetails(userId);
+    }, []);
+
+    const itemImage = "";
+    const date = "03/03/2024";
+=======
     const fetchItemDetails = (userId) => {
         axios.get(`http://localhost:8081/user/product_details/${userId}`)
         .then((res) => {
@@ -44,6 +52,7 @@ function UpcomingBids ({userId}) {
     function classNames(...classes) {
         return classes.filter(Boolean).join(' ');
     }
+>>>>>>> 053ec0a4e5cde8886a8a26ef9cf6fa5a21ed05bd
 
     const navigate = useNavigate();
 

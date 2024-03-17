@@ -25,6 +25,14 @@ import Profile from './user/Profile';
 import Auction from './user/Auction';
 import Verification from './signup/Verification';
 import ProfileSection from './signup/ProfileSection';
+import ArtAuctionItemsListing from './categories/ArtAuctionItemsListing';
+import ArtItemDetaiils from './categories/ArtItemDetails';
+import ArtifactAuctionItemsListing from './categories/ArtifactAuctionItemsListing';
+import ArtifactItemDetails from './categories/ArtifactItemDetails';
+import ClientAdvisory from './components/ClientAdvisory';
+import Storage from './components/Storage';
+import CollectionService from './components/CollectionService';
+import Valuation from './components/Valuation';
 import AuctionDetails from './user/AuctionDetails';
 import PaymentSuccess from './user/PaymentSuccess';
 import UpcomingBidDetails from './user/UpcomingBidDetails';
@@ -39,6 +47,10 @@ function App() {
         <Routes location={location} key={location.pathname}>
             <Route path="/*" element={<Home/>}/>
             <Route path="/categories/Category" element={<Categories/>} />
+            <Route path='/categories/Category/Art' element={<ArtAuctionItemsListing/>}/>
+            <Route path='/categories/category/Art/item' element={<ArtItemDetaiils/>}/>
+            <Route path='/categories/Category/Artifact' element={<ArtifactAuctionItemsListing/>}/>
+            <Route path='/categories/category/Artifact/item' element={<ArtifactItemDetails/>}/>
             <Route path='/signup/index' element={<Signup />} />
             <Route path='/signin/index' element={<Signin />} />
             <Route path='/signup/Success' element={<Success />} />
@@ -55,6 +67,10 @@ function App() {
             <Route path='/admin/BuyerDetail' element = {<BuyerDetails />} />
             <Route path='/components/PrivatePolicy' element = {<PrivatePolicy />} />
             <Route path='/components/Terms&Conditions' element = {<Terms />} />
+            <Route path='/components/ClientAdvisory' element={<ClientAdvisory/>}/>
+            <Route path='/components/Storage' element={<Storage/>}/>
+            <Route path='/components/CollectionService' element={<CollectionService/>}/>
+            <Route path='/components/Valuation' element={<Valuation/>}/>
             <Route path='/user/SideBar' element = {<UserSideBar />} />
             <Route path='/user/Dashboard' element = {<Dashboard />} />
             <Route path='/user/UpcomingBids' element = {<UpcomingBids />} />

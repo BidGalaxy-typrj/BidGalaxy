@@ -2,6 +2,7 @@ import HomeNav from "./HomePrimaryNav";
 import HomeSecondNav from "./HomeSecondNav";
 import CarouselPic1 from "../assets/CarousalPic1.svg";
 // import CarouselPic2 from "../assets/CarouselPic2.svg";
+import CarouselPic3 from "../assets/CarousalPic1.svg";
 import HomeCarousel from "./HomeCarousel";
 // import { useNavigate } from "react-router-dom";
 import ucAuction1 from '../assets/ucAuction1.svg';
@@ -39,7 +40,7 @@ function SamplePrevArrow(props) {
 
 function Home() {
   document.title = "BidGalaxy | Home";
-  let slides = [CarouselPic1, CarouselPic1, CarouselPic1];
+  let slides = [CarouselPic1, CarouselPic1, CarouselPic3];
 
   const settings = {
     dots: false,
@@ -59,6 +60,22 @@ function Home() {
 
   const handleUpcomingAuctioncardClick = () => {
     navigate("./categories/Category");
+  };
+
+  const handleClientAdviosryClick = ()=>{
+    navigate("./components/ClientAdvisory")
+  };
+
+  const handleStorageClick = ()=>{
+    navigate("./components/Storage")
+  };
+
+  const handleCollectionServiceClick = ()=>{
+    navigate("./components/CollectionService")
+  };
+
+  const handleValuationClick = ()=>{
+    navigate("./components/Valuation")
   };
 
   return (
@@ -101,7 +118,8 @@ function Home() {
             <div className="p-10">
               <div className="flex flex-row flex-wrap mx-auto gap-[40px]">
                 <div className="homeServiceUpperCircleBorder p-1 rounded-full">
-                  <div className="rounded-full w-[315px] h-[315px] homeServiceUpperCircle text-[#28303F] uppercase underline tracking-tighter text-center pt-[3.5rem] text-[22px] font-extrabold">
+                  <div className="rounded-full w-[315px] h-[315px] homeServiceUpperCircle text-[#28303F] uppercase underline tracking-tighter text-center pt-[3.5rem] text-[22px] font-extrabold hover:cursor-pointer"
+                  onClick={()=>handleClientAdviosryClick()}>
                     Client Advisory
                     <div className="flex justify-center mt-[2.5rem]">
                       <img
@@ -113,7 +131,8 @@ function Home() {
                   </div>
                 </div>
                 <div className="homeServiceUpperCircleBorder p-1 rounded-full">
-                  <div className="rounded-full w-[315px] h-[315px] homeServiceUpperCircle text-[#28303F] uppercase underline tracking-tighter text-center pt-[3.5rem] text-[22px] font-extrabold">
+                  <div className="rounded-full w-[315px] h-[315px] homeServiceUpperCircle text-[#28303F] uppercase underline tracking-tighter text-center pt-[3.5rem] text-[22px] font-extrabold hover:cursor-pointer"
+                  onClick={()=>{handleStorageClick()}}>
                     storage
                     <div className="flex justify-center mt-[2.5rem]">
                       <img
@@ -125,7 +144,8 @@ function Home() {
                   </div>
                 </div>
                 <div className="homeServiceUpperCircleBorder p-1 rounded-full">
-                  <div className="rounded-full w-[315px] h-[315px] homeServiceUpperCircle text-[#28303F] uppercase underline tracking-tighter text-center pt-[3.5rem] text-[22px] font-extrabold font-cantora">
+                  <div className="rounded-full w-[315px] h-[315px] homeServiceUpperCircle text-[#28303F] uppercase underline tracking-tighter text-center pt-[3.5rem] text-[22px] font-extrabold font-cantora hover:cursor-pointer"
+                  onClick={()=>{handleCollectionServiceClick()}}>
                     collection service
                     <div className="flex justify-center mt-[2.5rem]">
                       <img
@@ -142,7 +162,8 @@ function Home() {
               <div className="">
                 <div className="flex flex-row flex-wrap mx-auto">
                   <div className="homeServiceUpperCircleBorder p-1 rounded-full">
-                    <div className="rounded-full w-[315px] h-[315px] homeServiceUpperCircle text-[#28303F] uppercase underline tracking-tighter text-center pt-[3.5rem] text-[22px] font-extrabold font-cantora">
+                    <div className="rounded-full w-[315px] h-[315px] homeServiceUpperCircle text-[#28303F] uppercase underline tracking-tighter text-center pt-[3.5rem] text-[22px] font-extrabold font-cantora hover:cursor-pointer"
+                    onClick={()=>handleValuationClick()}>
                       valuation
                       <div className="flex justify-center mt-[2.5rem]">
                         <img
