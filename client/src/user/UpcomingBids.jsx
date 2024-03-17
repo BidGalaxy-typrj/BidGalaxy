@@ -48,10 +48,8 @@ function UpcomingBids ({userId}) {
     const navigate = useNavigate();
 
     function handleAuctionInterestClick (itemId) {
-        navigate(`/user/AuctionDetails?q=${itemId}&r=${userId}`);
+        navigate(`/user/UpcomingBidDetails?q=${itemId}`);
     }
-
-    console.log(items);
 
     return items ? (
         <div className="wrapper">

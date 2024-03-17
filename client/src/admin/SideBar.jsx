@@ -10,6 +10,7 @@ import AdminDash from "./Index";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
+import { RiAuctionFill } from "react-icons/ri";
 
 const SideBar = () =>{
 
@@ -61,6 +62,10 @@ const SideBar = () =>{
         navigate("/admin/AuctionedItems");
     }
 
+    const handleBiddersClick = () => {
+        navigate("/admin/Bidders");
+    }
+
     return (
     <div className="mx-auto">
         <HomeNav />
@@ -104,6 +109,13 @@ const SideBar = () =>{
                         <div className={`flex h-12 items-center`}>
                             <div className="w-1/3"><CgBrowser className={`text-[#28303F] size-5`}/></div>
                             <div className="w-2/3"><span className={`text-[#28303F] font-cantora font-bold text-xl ${!open && 'hidden'}`}>Auctioned Items</span> </div>
+                            <div className="w-1/3 flex justify-end"><FaArrowRightLong className={`text-[#28303F] size-5`}/></div>
+                        </div>
+                    </li>
+                    <li className={`hover:bg-hover-sidebar hover:rounded-full hover:cursor-pointer px-3`} onClick={handleBiddersClick}> 
+                        <div className={`flex h-12 items-center`}>
+                            <div className="w-1/3"><RiAuctionFill className={`text-[#28303F] size-5`}/></div>
+                            <div className="w-2/3"><span className={`text-[#28303F] font-cantora font-bold text-xl ${!open && 'hidden'}`}>Bidders</span> </div>
                             <div className="w-1/3 flex justify-end"><FaArrowRightLong className={`text-[#28303F] size-5`}/></div>
                         </div>
                     </li>

@@ -48,13 +48,16 @@ function HomeNav() {
     document.title === "BidGalaxy | AuctionItemDetails" ||
     document.title === "BidGalaxy | AuctionedItems" ||
     document.title === "BidGalaxy | AuctionedItemDetails" ||
-    document.title === "BidGalaxy | AddBuyerDetails";
+    document.title === "BidGalaxy | AddBuyerDetails" ||
+    document.title === "BidGalaxy | BidingList" ||
+    document.title === "BidGalaxy | BiddingDetails";
   const UserDashboard = 
     document.title === "BidGalaxy | UserDashboard" ||
     document.title === "BidGalaxy | Profile" ||
     document.title === "BidGalaxy | AuctionDetails" ||
     document.title === "BidGalaxy | RegisterItem" ||
-    document.title === "BidGalaxy | RegisterSuccess";
+    document.title === "BidGalaxy | RegisterSuccess" ||
+    document.title === "BidGalaxy | UpcomingBidDetails";
   return (
     <nav className="relative primaryNavBg">
       <div className="primaryNav flex flex-row justify-between items-center mx-[100px]">

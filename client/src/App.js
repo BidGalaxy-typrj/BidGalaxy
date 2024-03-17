@@ -27,6 +27,9 @@ import Verification from './signup/Verification';
 import ProfileSection from './signup/ProfileSection';
 import AuctionDetails from './user/AuctionDetails';
 import PaymentSuccess from './user/PaymentSuccess';
+import UpcomingBidDetails from './user/UpcomingBidDetails';
+import Bidders from './admin/Bidders';
+import BiddingDetails from './admin/BiddingDetails';
 
 
 
@@ -61,6 +64,9 @@ function App() {
             <Route path='/signup/ProfileSection' element = {<ProfileSection />} />
             <Route path='/user/AuctionDetails' element = {<AuctionDetails />} />
             <Route path='/user/PaymentSuccess' element = {<PaymentSuccess />} />
+            <Route path='/user/UpcomingBidDetails' element = {<UpcomingBidDetails />} />
+            <Route path='/admin/Bidders' element = {<Bidders />} />
+            <Route path='/admin/BiddingDetails' element = {<BiddingDetails />} />
          </Routes>
     );
   }

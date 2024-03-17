@@ -71,10 +71,10 @@ function AuctionItems () {
         <div>
             <HomeNav />
             <section className="w-[1400px] mx-auto">
-                <div className="text-[24px] font-extrabold textColor uppercase underline tracking-tighter font-cantora mt-[50px] hover:scale-105 transition-all ease-out ">
+                <div className="text-[24px] font-extrabold textColor uppercase underline tracking-tighter font-cantora mt-[50px]  ">
                     add item
                 </div>
-                <div className="w-[190px] h-[45px] bg-[#0F2D37] flex flex-row justify-center items-center rounded-2xl gap-3 cursor-pointer mt-[34px]" onClick={handleItemPlaceClick}>
+                <div className="w-[190px] h-[45px] bg-[#0F2D37] flex flex-row justify-center items-center rounded-2xl gap-3 cursor-pointer mt-[34px] hover:scale-105 transition-all ease-out" onClick={handleItemPlaceClick}>
                     <FaPlus className="text-white w-[20px] h-[20px] " />
                     <span className={`text-white font-cantora font-semibold text-lg uppercase`}>add item</span>
                 </div>

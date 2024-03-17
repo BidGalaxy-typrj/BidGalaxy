@@ -778,6 +778,135 @@ app.get('/user/product_details/:userId', (req, res) => {
     });
 });
 
+//getting unique product_ids and respective user_ids from registered product
+app.get('/admin/bidding_list', (req, res) => {
+    const query = "SELECT DISTINCT product_id FROM product_registration";
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error while fetching product IDs:', err);
+            return res.status(500).json({ error: 'Error while fetching product IDs. Try again later.' });
+        }
+
+        if (results.length === 0) {
+            console.error('No product IDs found');
+            return res.status(404).json({ error: 'No products found' });
+        }
+
+        const productDetailsPromises = results.map(result => {
+            const productId = result.product_id;
+            const usersQuery = "SELECT user_id FROM product_registration WHERE product_id = ?";
+            return new Promise((resolve, reject) => {
+                db.query(usersQuery, [productId], (err, userResults) => {
+                    if (err) {
+                        console.error(`Error while fetching user IDs for product ID ${productId}:`, err);
+                        reject(err);
+                    } else {
+                        const users = userResults.map(user => user.user_id);
+                        resolve({ productId, users });
+                    }
+                });
+            });
+        });
+
+        Promise.all(productDetailsPromises)
+            .then(productDetails => {
+                res.json(productDetails);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                res.status(500).json({ error: 'Internal server error' });
+            });
+    });
+});
+
+//Getting product details of registered product by using product_id
+app.post('/admin/bidItemDetails', (req, res) => {
+    const productIds = req.body.productIds;
+  
+    // Query to fetch product details based on product IDs
+    const query = `SELECT * FROM products WHERE id IN (${productIds.join(',')})`;
+  
+    // Execute the query
+    db.query(query, (err, results) => {
+      if (err) {
+        console.error('Error fetching product details:', err);
+        return res.status(500).json({ error: 'Error fetching product details' });
+      }
+  
+      // Send the product details back to the client
+      res.json(results);
+    });
+});
+
+//Getting user_id using the product_id
+app.get('/admin/bidItemDetails/users/:productId', (req, res) => {
+    const productId = req.params.productId;
+
+    // Query to fetch user IDs based on product ID
+    const query = "SELECT user_id FROM product_registration WHERE product_id = ?";
+    
+    // Execute the query
+    db.query(query, [productId], (err, results) => {
+        if (err) {
+            console.error('Error fetching user IDs:', err);
+            return res.status(500).json({ error: 'Error fetching user IDs' });
+        }
+
+        // Extract user IDs from the results
+        const userIds = results.map(result => result.user_id);
+        res.json(userIds);
+    });
+});
+
+//Get registerd user details using user_ids
+app.post('/admin/bidUserDetails', (req, res) => {
+    const userIds = req.body.userIds;
+
+    // Check if userIds array is empty
+    if (userIds.length === 0) {
+        return res.status(400).json({ error: 'No user IDs provided' });
+    }
+
+    // Query to fetch product details based on product IDs
+    const query = `SELECT * FROM user_details WHERE user_id IN (${userIds.join(',')})`;
+
+    // Execute the query
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error while fetching user details:', err);
+            return res.status(500).json({ error: 'Error fetching user details' });
+        }
+
+        // Send the product details back to the client
+        res.json(results);
+    });
+});
+
+//Sending meeting link through mail to registered users
+app.post('/admin/sendMail', (req, res) => {
+    const { first_name, email_address, link, productName, artistName } = req.body;
+  
+    const mailSubject = 'Registration Confirmation!';
+    const mailContent = `
+      <h4>Hello ${first_name},</h4>
+      <p>Your registration for the product ${productName} by the artist ${artistName} has been successfully verified.
+      You can join the auction by clicking the following link:</p>
+      <p><a href="${link}">${link}</a></p>
+      <p>If you have any questions or concerns about the auction, please contact us.</p>
+      <p>See you at the auction!</p>
+      <p><bold>BidGalaxy Team</bold></p>
+    `;
+  
+    sendMail(email_address, mailSubject, mailContent)
+      .then(() => {
+        res.sendStatus(200);
+      })
+      .catch(error => {
+        console.error('Error sending email:', error);
+        res.status(500).send('Failed to send email');
+      });
+  });
+
 app.listen(8081, () => {
     console.log("Server is Running...");
 })
