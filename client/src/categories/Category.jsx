@@ -2,12 +2,20 @@ import HomeNav from "../components/HomePrimaryNav";
 import artCategory from "../assets/artCategory.svg";
 import artifactCategory from "../assets/artifactCategory.svg";
 import Footer from "../components/Footer";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 function Categories() {
 
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
+
+    const handleArtItemClick = () => {
+        navigate(`/categories/Category/Art`);
+    }
+
+    const handleArtifactItemClick = () => {
+        navigate(`/categories/Category/Artifact`);
+    }
 
     return (
         <div>
@@ -18,12 +26,12 @@ function Categories() {
                     <div className="mt-[30px]">
                         <div className="flex flex-row justify-center flex-wrap gap-[65px]">
                             <div className="w-[480px] h-[270px] rounded-[30px] categoryCard flex justify-center items-center cursor-pointer artCategoryCard">
-                                <div className="">
+                                <div className="" onClick={()=>handleArtItemClick()}>
                                     <img src={artCategory} alt="artCategory" className="w-[410px] h-[210px]" />
                                 </div>
                             </div>
                             <div className="w-[480px] h-[270px] rounded-[30px] categoryCard flex justify-center items-center cursor-pointer artifactCategoryCard">
-                                <div className="">
+                                <div className="" onClick={()=>handleArtifactItemClick()}>
                                     <img src={artifactCategory} alt="artCategory" className="w-[410px] h-[210px]" />
                                 </div>
                             </div>
