@@ -542,6 +542,28 @@ app.get('/user/user_details/:userId', (req, res) => {
         }
     });
 });
+//Fetching items of particular category
+app.get('/home/artItems/:category',(req,res)=>{
+    const category = req.params.category;
+    db.query('SELECT * FROM products WHERE type = ?',[category],(err,result)=>{
+        if(err){
+            console.log(err);
+            res.status(500).json({error:"Internal Server Error"});
+        }
+        else{
+            if(result.length > 0){
+                let artItems = [];
+                for(let i=0; i<result.length; i++){
+                    artItems.push(result[i]);
+                }
+                res.json(artItems);
+            }
+            else{
+                res.status(404).json({error:"Items not Found"});
+            }
+        }
+    });
+});
 
 app.listen(8081, () => {
     console.log("Server is Running...");
