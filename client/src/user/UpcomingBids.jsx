@@ -16,14 +16,6 @@ function UpcomingBids ({userId}) {
         }
     }, [userId]);
 
-<<<<<<< HEAD
-        // Fetch user details using the user ID
-        fetchUserDetails(userId);
-    }, []);
-
-    const itemImage = "";
-    const date = "03/03/2024";
-=======
     const fetchItemDetails = (userId) => {
         axios.get(`http://localhost:8081/user/product_details/${userId}`)
         .then((res) => {
@@ -52,7 +44,6 @@ function UpcomingBids ({userId}) {
     function classNames(...classes) {
         return classes.filter(Boolean).join(' ');
     }
->>>>>>> 053ec0a4e5cde8886a8a26ef9cf6fa5a21ed05bd
 
     const navigate = useNavigate();
 
@@ -62,6 +53,9 @@ function UpcomingBids ({userId}) {
 
     return items ? (
         <div className="wrapper">
+            <div className="text-[24px] font-extrabold textColor uppercase underline tracking-wide font-cantora mt-[50px] ml-16 ">
+                upcoming bids
+            </div>
             <div className="w-full flex flex-row justify-center items-center flex-wrap p-10">
                 <div className=" flex flex-row justify-start items-start gap-7">
                     {Array.isArray(items) && items.map((item, index) => (

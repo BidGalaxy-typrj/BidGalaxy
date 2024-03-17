@@ -4,7 +4,7 @@ import { MdDateRange } from "react-icons/md";
 import { FaRupeeSign } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 
-function ArtifactAuctionItemsListing({}) {
+function ArtifactAuctionItemsListing() {
     document.title = "BidGalaxy | AuctionItems";
 
     const [modifiedItems, setItems] = useState([]);

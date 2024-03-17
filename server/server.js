@@ -906,7 +906,7 @@ app.post('/admin/bidUserDetails', (req, res) => {
 
 //Sending meeting link through mail to registered users
 app.post('/admin/sendMail', (req, res) => {
-    const { first_name, email_address, link, productName, artistName } = req.body;
+    const { user_id, first_name, email_address, link, productId, productName, artistName } = req.body;
   
     const mailSubject = 'Registration Confirmation!';
     const mailContent = `
@@ -921,13 +921,65 @@ app.post('/admin/sendMail', (req, res) => {
   
     sendMail(email_address, mailSubject, mailContent)
       .then(() => {
-        res.sendStatus(200);
+        const query = "UPDATE product_registration SET meeting_link = ? WHERE user_id = ? AND product_id = ?";
+        db.query(query, [link, user_id, productId], (err, result) => {
+            if (err) {
+                console.error('Error while updating meeting link:', err);
+                return res.status(500).json({ error: 'Error in meeting link updation.' });
+            }
+            res.sendStatus(200);
+        })
       })
       .catch(error => {
         console.error('Error sending email:', error);
         res.status(500).send('Failed to send email');
-      });
+    });
   });
+
+  app.get('/user/ongoing_bids/:userId', (req, res) => {
+    const userId = req.params.userId;
+
+    const query = "SELECT pr.product_id, pr.meeting_link FROM product_registration pr WHERE pr.user_id = ?";
+    db.query(query, [userId], (err, results) => {
+        if (err) {
+            console.error('Error while fetching product_ids:', err);
+            return res.status(500).json({ error: 'Error while fetching product ids. Try again later.' });
+        }
+
+        if (results.length === 0) {
+            console.error('No product ids found for the user');
+            return res.status(404).json({ error: 'No products found for the user' });
+        }
+
+        const productIds = results.map(result => result.product_id);
+        const meetingLinks = results.reduce((acc, curr) => {
+            acc[curr.product_id] = curr.meeting_link;
+            return acc;
+        }, {});
+
+        const productQuery = "SELECT * FROM products WHERE id IN (?) AND auction_date = CURDATE()";
+        db.query(productQuery, [productIds], (productErr, productResults) => {
+            if (productErr) {
+                console.error('Error while fetching product information:', productErr);
+                return res.status(500).json({ error: 'Error while fetching product information. Try again later.' });
+            }
+
+            if (productResults.length === 0) {
+                console.error('No products found with the given product_ids');
+                return res.status(404).json({ error: 'No products found with the given product_ids' });
+            }
+
+            // Merge product details with meeting links
+            const productsWithLinks = productResults.map(product => ({
+                ...product,
+                meeting_link: meetingLinks[product.id] || null
+            }));
+
+            res.json(productsWithLinks);
+            console.log(productsWithLinks);
+        });
+    });
+});
 
 app.listen(8081, () => {
     console.log("Server is Running...");

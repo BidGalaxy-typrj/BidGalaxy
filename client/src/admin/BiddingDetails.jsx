@@ -61,11 +61,13 @@ function BiddingDetails () {
     const [selectedUser, setSelectedUser] = useState(null);
     const [mailSentStatus, setMailSentStatus] = useState({});
 
-    const sendMail = (email_address, first_name) => {
+    const sendMail = (user_id, email_address, first_name) => {
       axios.post('http://localhost:8081/admin/sendMail', {
         email_address,
         first_name,
+        user_id,
         link,
+        productId: product.id,
         productName: product.title,
         artistName: product.artist_name,
       })
@@ -96,7 +98,7 @@ function BiddingDetails () {
       }
       // Send mail with the link
       if (selectedUser) {
-          sendMail(selectedUser.email_address, selectedUser.first_name);
+          sendMail(selectedUser.user_id, selectedUser.email_address, selectedUser.first_name);
           setMailSentStatus(prevState => ({
             ...prevState,
             [selectedUser.user_id]: true // Update mail sent status for the selected user

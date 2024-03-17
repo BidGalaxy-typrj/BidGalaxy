@@ -351,13 +351,25 @@ function AuctionDetails() {
             </div>
         </div>
         <div className="w-full flex justify-center">
-            <button type="submit" className=' flex justify-center items-center w-[300px] h-[50px] bg-[#0F2D37] rounded-full cursor-pointer hover:scale-105 hover:shadow-2xl transition-all ease-out'
-            onClick={handleItemRegisterButton}
+          {daysLeft !== "Expired" && daysLeft > 4 ? (
+            <button
+              type="submit"
+              className=' flex justify-center items-center w-[300px] h-[50px] bg-[#0F2D37] rounded-full cursor-pointer hover:scale-105 hover:shadow-2xl transition-all ease-out'
+              onClick={handleItemRegisterButton}
             >
-                <div className=' text-white text-2xl font-cantora font-extrabold tracking-wider'>
-                    Register
-                </div>
+              <div className=' text-white text-2xl font-cantora font-extrabold tracking-wider'>
+                Register
+              </div>
             </button>
+          ) : (
+            <div
+              className=' flex justify-center items-center w-[300px] h-[50px] bg-[#0F2D37] rounded-full cursor-not-allowed hover:scale-105 hover:shadow-2xl transition-all ease-out'
+            >
+              <div className=' text-white text-2xl font-cantora font-extrabold tracking-wider'>
+                {daysLeft === "Expired" ? "Expired" : "Registration Closed"}
+              </div>
+            </div>
+          )}
         </div>
         <div className=" font-cantora text-base font-semibold tracking-wide text-red-600 mt-8 text-center">
           <span className="text-xl">*Note : </span> You have to register for the auction 4 days earlier(minimum), after that no responses will be considered. 
