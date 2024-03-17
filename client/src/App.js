@@ -33,6 +33,8 @@ import ClientAdvisory from './components/ClientAdvisory';
 import Storage from './components/Storage';
 import CollectionService from './components/CollectionService';
 import Valuation from './components/Valuation';
+import AuctionDetails from './user/AuctionDetails';
+import PaymentSuccess from './user/PaymentSuccess';
 
 
 
@@ -73,6 +75,8 @@ function App() {
             <Route path='/user/Profile' element = {<Profile />} />
             <Route path='/user/Auction' element = {<Auction />} />
             <Route path='/signup/ProfileSection' element = {<ProfileSection />} />
+            <Route path='/user/AuctionDetails' element = {<AuctionDetails />} />
+            <Route path='/user/PaymentSuccess' element = {<PaymentSuccess />} />
          </Routes>
     );
   }

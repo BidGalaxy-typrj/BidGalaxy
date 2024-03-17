@@ -10,12 +10,15 @@ import multer from "multer";
 import nodemailer from 'nodemailer';
 import Randomstring from "randomstring";
 import dotenv from 'dotenv';
+import Razorpay from 'razorpay';
+import crypto from 'crypto';
 
 
 const salt = 10;
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({extended : false}));
 app.use(cors({
     origin : ["http://localhost:3000"],
     methods : ["POST", "GET", "PUT"],
@@ -226,7 +229,8 @@ app.get('/admin/details/:userId', (req, res) => {
     });
 });
 
-const storage = multer.diskStorage({
+//Storage and directory declaration for product image to be stored
+const storageForProduct = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, '../client/src/assets/auctionItemImages/');
     },
@@ -236,7 +240,7 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storageForProduct });
 
 app.post('/admin/PlaceItem', upload.fields([
     { name: 'product_image1', maxCount: 1 },
@@ -424,8 +428,8 @@ app.get('/admin/AuctionedItemDetails/:id', (req, res) => {
             res.status(500).json({ error: 'Internal Server Error' });
         } else {
             if (results.length > 0) {
-                const itemDetails = results[0]; // Assuming only one user will be returned
-                res.json(itemDetails);
+                const userDetails = results[0]; // Assuming only one user will be returned
+                res.json(userDetails);
             } else {
                 res.status(404).json({ error: 'User not found' });
             }
@@ -489,27 +493,27 @@ app.get('/user/details/:userId', (req, res) => {
     });
 });
 
-app.get('/user/upcomingBids/:userId',(req,res)=>{
-    const userId = req.params.userId;
-    const sql = "SELECT * FROM product_registration WHERE user_id = ?";
-    db.query(sql,[userId],(err,data)=>{
-        if(err){
-            console.log("Error fetching product Ids",err);
-            return res.status(500).json({Error:"Error in Fetching product Ids"});
-        }
-        if(data.length === 0){
-            return res.status(404).json({Error:"Product Not Found"});
-        }
-        const productIds = data[0];
-        return res.json(productIds);
-    });
-});
+// app.get('/user/upcomingBids/:userId',(req,res)=>{
+//     const userId = req.params.userId;
+//     const sql = "SELECT * FROM product_registration WHERE user_id = ?";
+//     db.query(sql,[userId],(err,data)=>{
+//         if(err){
+//             console.log("Error fetching product Ids",err);
+//             return res.status(500).json({Error:"Error in Fetching product Ids"});
+//         }
+//         if(data.length === 0){
+//             return res.status(404).json({Error:"Product Not Found"});
+//         }
+//         const productIds = data[0];
+//         return res.json(productIds);
+//     });
+// });
 
-//Profile update of user
+//Profile update of user at register
 app.put('/user/Profile/:userId', (req, res) => {
     const userId = req.params.userId;
     const formData = req.body;
-    console.log(formData);
+    // console.log(formData);
 
     const query = 'UPDATE user_details SET first_name = ?, middle_name = ?, last_name = ?, contact_number = ?, gender = ?, street_address1 = ?, street_address2 = ?, city = ?, state = ?, postal_code = ?, country = ?, modified_timestamp = NOW() WHERE user_id = ?';
 
@@ -562,6 +566,237 @@ app.get('/home/artItems/:category',(req,res)=>{
                 res.status(404).json({error:"Items not Found"});
             }
         }
+    });
+});
+
+//Storage and directory declaration for product image to be stored
+const storageForUser = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, '../client/src/assets/userProfile/');
+    },
+    filename: function (req, file, cb) {
+        // Use the original filename provided by the client
+        cb(null, file.originalname);
+    }
+});
+
+const uploadProfileImage = multer({ storage: storageForUser });
+
+//Updating user profile in user section
+app.put('/user/user_profile/:userId', uploadProfileImage.fields([{ name: 'profile_url', maxCount: 1 }]), (req, res) => {
+    const userId = req.params.userId;
+    const formData = req.body;
+
+    // Fetch user details from the database
+    db.query('SELECT * FROM user_details WHERE user_id = ?', [userId], (err, result) => {
+        if (err) {
+            console.error('Error fetching user details:', err);
+            return res.status(500).json({ error: 'Error fetching user details' });
+        }
+
+        if (result.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const userDetails = result[0];
+
+        // Initialize an object to store the updated fields
+        const updatedFields = {};
+
+        // Iterate over the keys in formData to check for modified fields
+        Object.keys(formData).forEach(key => {
+            // Check if the key exists in userDetails
+            if (userDetails.hasOwnProperty(key)) {
+                // If the value is different, update the field
+                if (userDetails[key] !== formData[key]) {
+                    updatedFields[key] = formData[key];
+                }
+            }
+        });
+
+        // If profile_url is provided, update it in the database
+        if (req.files['profile_url'] && req.files['profile_url'][0].path) {
+            updatedFields['profile_url'] = req.files['profile_url'][0].path;
+        }
+
+        // If there are updated fields, construct the SQL query dynamically
+        if (Object.keys(updatedFields).length > 0) {
+            let query = 'UPDATE user_details SET ';
+            const values = [];
+
+            Object.keys(updatedFields).forEach((key, index) => {
+                query += `${key} = ?, `;
+                values.push(updatedFields[key]);
+            });
+
+            // Remove the trailing comma and space from the query
+            query = query.slice(0, -2);
+
+            query += ' WHERE user_id = ?';
+            values.push(userId);
+
+            // Execute the SQL query with the updated values
+            db.query(query, values, (err, result) => {
+                if (err) {
+                    console.error('Error updating user profile:', err);
+                    return res.status(500).json({ error: 'Error updating user profile' });
+                }
+                console.log('User profile updated successfully');
+                res.sendStatus(200);
+            });
+        } else {
+            // If no fields are modified, send a response indicating no changes were made
+            console.log('No fields to update');
+            res.status(200).json({ message: 'No fields to update' });
+        }
+    });
+});
+
+//Razorpay integration for registering for an item
+app.post('/create/orderId', async (req, res) => {
+
+    try {
+        const razorpay = new Razorpay({
+            key_id: process.env.RAZORPAY_ID_KEY,
+            key_secret: process.env.RAZORPAY_SECRET_KEY,
+        });
+
+        const options = req.body;
+        const order = await razorpay.orders.create(options);
+
+        if(!order) {
+            return res.status(500).send("Error");
+        }
+
+        res.status(200).json(order);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send("Error");
+    }
+});
+
+//To check whether the transaction is valid or not
+app.post('/order/validate', async (req, res) => {
+    try {
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+
+        const sha = crypto.createHmac("sha256", process.env.RAZORPAY_SECRET_KEY);
+        sha.update(`${razorpay_order_id}|${razorpay_payment_id}`);
+        const digest = sha.digest("hex");
+
+        if (digest !== razorpay_signature) {
+            return res.status(400).json({ msg: "Transaction is not legit!" });
+        }
+
+        // Validation successful, send success response
+        return res.status(200).json({
+            msg: "Success",
+            orderId: razorpay_order_id,
+            paymentId: razorpay_payment_id
+        });
+    } catch (error) {
+        console.error("Error validating payment:", error);
+        return res.status(500).json({ msg: "Internal server error" });
+    }
+});
+
+//Product Registration by user data insertion into table
+app.post('/user/product_registration/:productId/:userId', (req, res) => {
+    const userId = req.params.userId;
+    const productId = req.params.productId;
+
+    // Fetch user email and name from the users table
+    const userQuery = "SELECT email_address, username FROM users WHERE user_id = ?";
+    db.query(userQuery, [userId], (userErr, userResult) => {
+        if (userErr) {
+            console.error('Error while fetching user information:', userErr);
+            return res.status(500).json({ error: 'Error while fetching user information. Try again later.' });
+        }
+
+        if (userResult.length === 0) {
+            console.error('User not found');
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const userEmail = userResult[0].email_address;
+        const userName = userResult[0].username;
+
+        // Fetch product title and artist name from the products table
+        const productQuery = "SELECT title, artist_name FROM products WHERE id = ?";
+        db.query(productQuery, [productId], (productErr, productResult) => {
+            if (productErr) {
+                console.error('Error while fetching product information:', productErr);
+                return res.status(500).json({ error: 'Error while fetching product information. Try again later.' });
+            }
+
+            if (productResult.length === 0) {
+                console.error('Product not found');
+                return res.status(404).json({ error: 'Product not found' });
+            }
+
+            const productTitle = productResult[0].title;
+            const artistName = productResult[0].artist_name;
+
+            // Construct email content
+            const mailSubject = "Product Registration Successful!";
+            const content = `<h3>Dear ${userName},</h3>\n\nYou have successfully registered for <b>${productTitle}</b> by <b>${artistName}</b>.\n\nThank you for registering.<br/>You will receive a confirmation mail containing the meeting link and details within 1 to 2 working days.<br/>Best regards,<br/><b>BidGalaxy Team.</b>`;
+
+            // Insert into product_registration table
+            const registrationQuery = "INSERT INTO product_registration (product_id, user_id) VALUES (?, ?)";
+            db.query(registrationQuery, [productId, userId], (regErr, regResult) => {
+                if (regErr) {
+                    console.error('Error while registering product:', regErr);
+                    return res.status(500).json({ error: 'Error while registering product. Try again later.' });
+                }
+
+                console.log('Product registered successfully');
+
+                // Send email
+                sendMail(userEmail, mailSubject, content)
+                    .then(() => {
+                        res.sendStatus(200);
+                    })
+                    .catch((mailErr) => {
+                        console.error('Error while sending email:', mailErr);
+                        res.status(500).json({ error: 'Error while sending email. Try again later.' });
+                    });
+            });
+        });
+    });
+});
+
+//getting product based on user_id
+app.get('/user/product_details/:userId', (req, res) => {
+    const userId = req.params.userId;
+
+    const query = "SELECT product_id FROM product_registration WHERE user_id = ?";
+    db.query(query, [userId], (err, results) => {
+        if (err) {
+            console.error('Error while fetching product_ids:', err);
+            return res.status(500).json({ error: 'Error while fetching product ids. Try again later.' });
+        }
+
+        if (results.length === 0) {
+            console.error('No product ids found for the user');
+            return res.status(404).json({ error: 'No products found for the user' });
+        }
+
+        const productIds = results.map(result => result.product_id);
+
+        const productQuery = "SELECT * FROM products WHERE id IN (?)";
+        db.query(productQuery, [productIds], (productErr, productResults) => {
+            if (productErr) {
+                console.error('Error while fetching product information:', productErr);
+                return res.status(500).json({ error: 'Error while fetching product information. Try again later.' });
+            }
+
+            if (productResults.length === 0) {
+                console.error('No products found with the given product_ids');
+                return res.status(404).json({ error: 'No products found with the given product_ids' });
+            }
+
+            res.json(productResults);
+        });
     });
 });
 

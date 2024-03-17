@@ -39,7 +39,7 @@ function PlaceItem () {
             return;
         }
         if (file.size > 500 * 1024 ) { 
-            alert('File size exceeds the limit of 1MB.');
+            alert('File size exceeds the limit of 500KB.');
             e.target.value = '';
             return;
         }
