@@ -18,18 +18,6 @@ function UpcomingBids ({userId}) {
         fetchUserDetails(userId);
     }, []);
 
-    const fetchUserDetails = (userId) => {
-        // Make API call to fetch user details based on the user ID
-        axios.get(`http://localhost:8081/user/upcomingBids/${userId}`)
-            .then((res) => {
-                console.log('Fetched User Details:', res.data);
-                setRegisteredBids(res.data);
-            })
-            .catch((err) => {
-                console.error('Error fetching user details:', err);
-            });
-    };
-
     const itemImage = "";
     const date = "03/03/2024";
 
