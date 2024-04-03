@@ -10,6 +10,8 @@ function OngoingBids ({userId}) {
 
     const [items, setItems] = useState([]);
 
+    const [message, setMessage] = useState('');
+
     useEffect(() => {
         if(userId) {
             fetchItemDetails(userId);
@@ -35,7 +37,7 @@ function OngoingBids ({userId}) {
                 });
                 setItems(modifiedItems);
             } else {
-                console.error("Response data is not an array:", res.data);
+                setMessage("No Ongoing Bids!");
             }
         })
         .catch((err) => console.error("Error fetching item details:", err));
@@ -51,7 +53,7 @@ function OngoingBids ({userId}) {
                 ongoing bids
             </div>
             {items.length === 0 ? (
-                <div className="text-center text-3xl text-gray-500 font-cantora font-bold dark:text-gray-400 mt-14 mb-3">No Ongoing Bids!</div>
+                <div className="text-center text-3xl text-gray-500 font-cantora font-bold dark:text-gray-400 mt-14 mb-3">{message}</div>
             ) : (
                 <div className="w-full flex flex-row justify-center items-center flex-wrap p-10">
                     <div className=" flex flex-row justify-start items-start gap-7">

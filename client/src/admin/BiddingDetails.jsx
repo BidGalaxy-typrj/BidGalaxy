@@ -110,7 +110,7 @@ function BiddingDetails () {
   return userDetails ? (
     <div className='wrapper'>
         <HomeNav />
-          <section className="w-[1400px] mx-auto mb-60">
+          <section className="w-[1400px] mx-auto mb-80">
                 {showModal && (
                   <div id="static-modal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="overflow-y-auto overflow-x-hidden absolute top-10 z-50 justify-center items-center w-full mx-auto md:inset-0 h-[calc(100%-1rem)]">
                     <div class="relative mx-auto p-4 w-full max-w-2xl max-h-full">
@@ -144,20 +144,6 @@ function BiddingDetails () {
                 <div className="flex flex-row justify-between items-center mt-10">
                     <div className="text-[24px] font-extrabold textColor uppercase underline tracking font-cantora">
                         bidding list
-                    </div>
-                    <div>
-                        <form class="w-[20rem] mx-auto">   
-                            <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white ">GO</label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                                    </svg>
-                                </div>
-                                <input type="search" id="default-search" class="block w-full p-4 ps-10 text-sm font-cantora text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-[#0F2D37] focus:border-[#0F2D37] dark:bg-white dark:border-white dark:placeholder-textColor dark:text-gray-900" placeholder="Search Item Names..." required />
-                                <button type="submit" class="text-white absolute end-2.5 bottom-2.5 bg-[#0F2D37] hover:bg-[#1a4857]  font-medium rounded-lg text-sm px-4 py-2 font-cantora">GO</button>
-                            </div>
-                        </form>
                     </div>
                 </div>
                 <div className="w-[1000px] mx-auto mt-14 flex flex-col">

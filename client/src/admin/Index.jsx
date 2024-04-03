@@ -40,6 +40,17 @@ function AdminDash() {
             console.log(err);
         });
     }, []);
+
+    const [userQueryCount, setUserQueryCount] = useState(null);
+
+    useEffect(() => {
+        axios.get('http://localhost:8081/admin/queries/count')
+        .then((res) => {
+            setUserQueryCount(res.data.count);
+        }).catch((err) => {
+            console.log(err);
+        });
+    }, []);
     return(
         <div className="w-full">
             <div className="grid grid-rows-3 grid-cols-3 mx-10 gap-16 justify-items-center mt-16">
@@ -91,7 +102,7 @@ function AdminDash() {
                             <h5 className="mb-0 text-2xl font-cantora textColor font-semibold uppercase">queries</h5>
                         </div>
                         <div className="mt-12">
-                            <h2 className=" text-5xl font-cantora font-bold textColor mb-0">4</h2>  
+                            <h2 className=" text-5xl font-cantora font-bold textColor mb-0">{userQueryCount}</h2>  
                         </div>
                     </div>
                 </div>

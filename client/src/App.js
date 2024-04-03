@@ -42,6 +42,7 @@ import ResetPassword from './reset_password/ResetPassword';
 import ChangePassword from './reset_password/ChangePassword';
 import Confirmation from './reset_password/Confirmation';
 import Contactus from './components/Contactus';
+import BidHistory from './user/BidHistory';
 
 
 
@@ -91,6 +92,7 @@ function App() {
             <Route path='/reset_password/ChangePassword' element = {<ChangePassword />} />
             <Route path='/reset_password/Confirmation' element ={<Confirmation />} />
             <Route path='/components/Contactus' element = {<Contactus />} />
+            <Route path='/user/BidHistory' element = {<BidHistory />} />
          </Routes>
     );
   }

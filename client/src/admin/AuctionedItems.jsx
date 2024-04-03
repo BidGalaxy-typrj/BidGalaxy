@@ -36,6 +36,8 @@ function AuctionedItems () {
     function handleAuctionedItemDetailsClick(itemId) {
         navigate(`/admin/AuctionedItemDetails?q=${itemId}`);
     }
+
+    const [search, setSearch] = useState('');
     return (
         <div>
             <HomeNav />
@@ -53,8 +55,13 @@ function AuctionedItems () {
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                                     </svg>
                                 </div>
-                                <input type="search" id="default-search" class="block w-full p-4 ps-10 text-sm font-cantora text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-[#0F2D37] focus:border-[#0F2D37] dark:bg-white dark:border-white dark:placeholder-textColor dark:text-gray-900" placeholder="Search Item Names..." required />
-                                <button type="submit" class="text-white absolute end-2.5 bottom-2.5 bg-[#0F2D37] hover:bg-[#1a4857]  font-medium rounded-lg text-sm px-4 py-2 font-cantora">GO</button>
+                                <input
+                                type="search"
+                                id="default-search"
+                                class="block w-full p-4 ps-10 text-sm font-cantora text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-[#0F2D37] focus:border-[#0F2D37] dark:bg-white dark:border-white dark:placeholder-textColor dark:text-gray-900"
+                                placeholder="Search Item Names..."
+                                onChange={(e) => setSearch(e.target.value)}
+                                />
                             </div>
                         </form>
                     </div>
@@ -81,7 +88,9 @@ function AuctionedItems () {
                                         </tr>
                                     </thead>
                                     <tbody className="bg-[#C9EDED]">
-                                        {items.map((item, index) => (
+                                        {items.filter((item) => {
+                                            return search.toLowerCase() === '' ? item : item.title.toLowerCase().includes(search);
+                                        }).map((item, index) => (
                                             <tr key={item.id}>
                                                 <td className={classNames(
                                                     index !== items.length - 1 ? 'border-b-2 border-[#14CFFC]' : '',
@@ -112,6 +121,14 @@ function AuctionedItems () {
                                                 </td>
                                             </tr>
                                         ))}
+                                        {items
+                                            .filter((item) => {
+                                                return search.toLowerCase() === '' ? item : item.title.toLowerCase().includes(search);
+                                            })
+                                            .length === 0 && (
+                                                <p className="font-cantora text-gray-600 text-2xl">No Match Found</p>
+                                            )
+                                        }
                                     </tbody>
                                 </table>
                             </div>

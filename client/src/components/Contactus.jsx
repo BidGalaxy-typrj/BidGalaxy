@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import HomeNav from './HomePrimaryNav';
 import Footer from './Footer';
+import axios from 'axios';
+import { message } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 
 function Contactus() {
@@ -20,6 +23,39 @@ function Contactus() {
     };
     const remainingCharacters = 1000 - values.description.length;
 
+    const navigate = useNavigate();
+    const handleSubmit = (e) => {
+      e.preventDefault();
+
+      axios.post('http://localhost:8081/contact', values)
+      .then((res) => {
+        if (res.data.Status === "Success") {
+          message.success("Query Sent Successfully to admin!");
+          setTimeout(() => {
+            navigate(-1);
+        }, 1000);
+        } else {
+          message.error("There is a problem. Try again later!");
+        }
+      })
+      .catch((err) => {
+        if (err.response) {
+          // The request was made and the server responded with a status code
+          console.log("A",err.response.data); // Response data
+          console.log("B",err.response.status); // HTTP status code
+          console.log("C",err.response.headers); // Response headers
+        } else if (err.request) {
+          // The request was made but no response was received
+          console.log("D",err.request); // Axios request instance
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', err.message); // Error message
+        }
+        console.log("E",err.config); // Axios request config
+        message.error("There is a problem from server-side. Try after sometimes!");
+      });
+    }
+
 
     return (
         <div className='wrapper'>
@@ -33,7 +69,7 @@ function Contactus() {
               </div>
               <div className='flex flex-row justify-between items-center mt-3 gap-5'>
                 <div className='w-2/3 ring-2 ring-tabcolor rounded-xl'>
-                  <form>
+                  <form onSubmit={handleSubmit}>
                     <div className='flex flex-col justify-center items-center w-[500px] mx-auto'>
                       <div className='w-full'>
                         <label htmlFor='name' className='text-base uppercase textColor tracking-wide required-highlight font-cantora'>Name</label>

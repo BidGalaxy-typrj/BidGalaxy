@@ -13,6 +13,7 @@ import HomeNav from "../components/HomePrimaryNav";
 import Footer from "../components/Footer";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import BidHistory from "./BidHistory";
 
 
 const SideBar = () => {
@@ -23,12 +24,14 @@ const SideBar = () => {
   const [selectedTab, setSelectedTab] = useState("dashboard");
   const [upcomingBidsOpen, setUpcomingBidsOpen] = useState(false);
   const [ongoingBidsOpen, setOngoingBidsOpen] = useState(false);
+  const [bidResultOpen, setBidResultopen] = useState(false);
 
   const handleTabClick = (tab) => {
     setSelectedTab(tab);
     setDropDownOpen(false);
     setUpcomingBidsOpen(false);
     setOngoingBidsOpen(false);
+    setBidResultopen(false);
   };
 
   const [userId, setUserId] = useState(null);
@@ -146,6 +149,7 @@ const SideBar = () => {
                       setDropDownOpen(false);
                       setSelectedTab(false);
                       setOngoingBidsOpen(false);
+                      setBidResultopen(false);
                     }}
                   >
                     <div className="p-2 justify-center pl-6">
@@ -159,13 +163,22 @@ const SideBar = () => {
                       setOngoingBidsOpen(true);
                       setDropDownOpen(false);
                       setSelectedTab(false);
+                      setBidResultopen(false);
                     }}
                   >
                     <div className="p-2 justify-center pl-6">
                       <span className="text-white">Ongoing Bids</span>
                     </div>
                   </li>
-                  <li className="hover:bg-hover-sidebar hover:cursor-pointer px-3">
+                  <li className={`hover:bg-hover-sidebar hover:cursor-pointer px-3`}
+                      onClick={() => {
+                      setUpcomingBidsOpen(false);
+                      setOngoingBidsOpen(false);
+                      setDropDownOpen(false);
+                      setSelectedTab(false);
+                      setBidResultopen(true);
+                    }}
+                    >
                     <div className="p-2 justify-center pl-6">
                       <span className="text-white">Bid Results</span>
                     </div>
@@ -231,6 +244,14 @@ const SideBar = () => {
           }`}
         >
           <OngoingBids userId={userId} />
+        </div>
+
+        <div
+          className={`${bidResultOpen ? "" : "hidden"} ${
+            open ? "w-3/4" : "w-full"
+          }`}
+        >
+          <BidHistory userId={userId} />
         </div>
       </div>
       <Footer />

@@ -69,12 +69,37 @@ const sendMail = async(email, mailSubject, content) => {
             html: content
         }
 
-        // const mailOption2 = {
-        //     from: email,
-        //     to: SMTP_MAIL,
-        //     subject: mailSubject,
-        //     html: content
-        // }
+        transporter.sendMail(mailOption1, function(error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log("Mail sent Successfully : ", info.response);
+            }
+        })
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const sendMailToAdmin = async(email, mailSubject, content) => {
+    try {
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: '587',
+            secure: false,
+            requireTLS: true,
+            auth: {
+              user: smtp_mail,
+              pass: smtp_pass
+            }
+        });
+
+        const mailOption1 = {
+            from: email,
+            to: smtp_mail,
+            subject: mailSubject,
+            html: content
+        }
 
         transporter.sendMail(mailOption1, function(error, info) {
             if (error) {
@@ -499,8 +524,8 @@ app.get('/admin/users/count', (req, res) => {
 app.get('/admin/products/count', (req, res) => {
     db.query("SELECT COUNT(*) AS count FROM products WHERE deleted = '0'", (err, result) => {
       if (err) {
-        console.error('Error fetching user count:', err);
-        res.status(500).json({ error: 'An error occurred while fetching user count' });
+        console.error('Error fetching product count:', err);
+        res.status(500).json({ error: 'An error occurred while fetching product count' });
         return;
       }
       const count = result[0].count;
@@ -512,8 +537,8 @@ app.get('/admin/products/count', (req, res) => {
 app.get('/admin/soldproducts/count', (req, res) => {
     db.query("SELECT COUNT(*) AS count FROM sold_products", (err, result) => {
       if (err) {
-        console.error('Error fetching user count:', err);
-        res.status(500).json({ error: 'An error occurred while fetching user count' });
+        console.error('Error fetching sold_products count:', err);
+        res.status(500).json({ error: 'An error occurred while fetching sold_products count' });
         return;
       }
       const count = result[0].count;
@@ -586,7 +611,7 @@ app.get('/user/user_details/:userId', (req, res) => {
                 const userDetails = results[0]; // Assuming only one user will be returned
                 res.json(userDetails);
             } else {
-                res.status(404).json({ error: 'User not found' });
+                res.status(200).json({ error: 'User not found' });
             }
         }
     });
@@ -823,7 +848,7 @@ app.get('/user/product_details/:userId', (req, res) => {
 
         if (results.length === 0) {
             console.error('No product ids found for the user');
-            return res.status(404).json({ error: 'No products found for the user' });
+            return res.status(200).json({ error: 'No products found for the user' });
         }
 
         const productIds = results.map(result => result.product_id);
@@ -837,7 +862,7 @@ app.get('/user/product_details/:userId', (req, res) => {
 
             if (productResults.length === 0) {
                 console.error('No products found with the given product_ids');
-                return res.status(404).json({ error: 'No products found with the given product_ids' });
+                return res.status(200).json({ error: 'No products found with the given product_ids' });
             }
 
             // console.log(productResults);
@@ -995,7 +1020,7 @@ app.post('/admin/sendMail', (req, res) => {
 
         if (results.length === 0) {
             console.error('No product ids found for the user');
-            return res.status(404).json({ error: 'No products found for the user' });
+            return res.status(200).json({ error: 'No products found for the user' });
         }
 
         const productIds = results.map(result => result.product_id);
@@ -1012,8 +1037,8 @@ app.post('/admin/sendMail', (req, res) => {
             }
 
             if (productResults.length === 0) {
-                console.error('No products found with the given product_ids');
-                return res.status(404).json({ error: 'No products found with the given product_ids' });
+                // console.error('No products found with the given product_ids');
+                return res.status(200).json({ error: 'No products found with the given product_ids for this user' });
             }
 
             // Merge product details with meeting links
@@ -1023,7 +1048,144 @@ app.post('/admin/sendMail', (req, res) => {
             }));
 
             res.json(productsWithLinks);
-            console.log(productsWithLinks);
+            // console.log(productsWithLinks);
+        });
+    });
+});
+
+//ContactUs
+app.post('/contact', (req, res) => {
+    const sql = "INSERT INTO user_queries (name, email_address, contact_number, description) VALUES (?, ?, ?, ?)";
+    const values = [req.body.name, req.body.email_address, req.body.contact_number, req.body.description];
+    db.query(sql, values, (err, result) => {
+        if (err) {
+            console.error('Error while sending the query:', productErr);
+            return res.status(500).json({ error: 'Error while sending query. Try again later.' });
+        }
+            let mailSubject = "User Query";
+            let content = `
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            <title>User Query</title>
+                            <style>
+                                body {
+                                    font-family: Arial, sans-serif;
+                                    line-height: 1.6;
+                                }
+                                .container {
+                                    max-width: 600px;
+                                    margin: 0 auto;
+                                    padding: 20px;
+                                    border: 1px solid #ccc;
+                                    border-radius: 5px;
+                                    background-color: #f9f9f9;
+                                }
+                                h1 {
+                                    color: #333;
+                                }
+                                p {
+                                    margin-bottom: 15px;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="container">
+                                <h1>User Query</h1>
+                                <p>Hello Admin,</p>
+                                <p>A new query has been submitted by a user:</p>
+                                <hr>
+                                <p><strong>Query Details:</strong></p>
+                                <ul>
+                                    <li><strong>Name: </strong>`+req.body.name+`</li>
+                                    <li><strong>Email: </strong>`+req.body.email_address+`</li>
+                                    <li><strong>Subject: </strong>`+req.body.description+`</li>
+                                </ul>
+                            </div>
+                        </body>
+                        </html>
+                        `;
+            sendMailToAdmin(req.body.email_address, mailSubject, content);
+            return res.json({ Status: "Success" });
+    })
+})
+
+//Getting total number of user queries
+app.get('/admin/queries/count', (req, res) => {
+    db.query("SELECT COUNT(*) AS count FROM user_queries", (err, result) => {
+      if (err) {
+        console.error('Error fetching user_queries count:', err);
+        res.status(500).json({ error: 'An error occurred while fetching user_queries count' });
+        return;
+      }
+      const count = result[0].count;
+      res.status(200).json({ count });
+    });
+});
+
+//Getting Bidding history of a user
+app.get('/user/bidding_history/:userId', (req, res) => {
+    const userId = req.params.userId;
+
+    const query = "SELECT email_address FROM users WHERE user_id = ?";
+    db.query(query, [userId], (err, results) => {
+
+        if (err) {
+            console.error("Can't get email_address");
+            return res.status(500).json({ error: 'No email address fetched using this user_id' });
+        }
+
+        const emailAddress = results[0].email_address;
+
+        console.log(emailAddress);
+
+        const productQuery = "SELECT product_id, final_price from sold_products WHERE buyer_email = ?";
+        db.query(productQuery, [emailAddress], (productErr, productResults) => {
+            if (productErr) {
+                console.error('Error while fetching registered product Ids:', err);
+                return res.status(500).json({ error: 'Error while fetching registered product ids. Try again later.' });
+            }
+
+            if (productResults.length === 0) {
+                console.error('No product ids found for the user');
+                return res.status(200).json({ error: 'No products found with that user_id' });
+            }
+
+            const productIds = productResults.map(productResult => productResult.product_id);
+            const finalPrices = productResults.reduce((acc, curr) => {
+                acc[curr.product_id] = curr.final_price;
+                return acc;
+            }, {});
+
+            console.log(productIds);
+            console.log(finalPrices);
+
+            const productDetailsQuery = "SELECT * FROM products WHERE id IN (?)";
+            db.query(productDetailsQuery, [productIds], (productDetailsErr, productDetailsResults) => {
+                if (productDetailsErr) {
+                    console.error('Error while fetching product information:', productDetailsErr);
+                    return res.status(500).json({ error: 'Error while fetching product information. Try again later.' });
+                }
+
+                if (productDetailsResults.length === 0) {
+                    // console.error('No products found with the given product_ids');
+                    return res.status(200).json({ error: 'No products found with the given email_address of this user' });
+                }
+
+                console.log(productDetailsResults);
+
+                // Merge product details with meeting links
+                const productsWithPrices = productDetailsResults.map(product => ({
+                    ...product,
+                    final_price: finalPrices[product.id] || null
+                }));
+                console.log(productsWithPrices);
+
+                res.json(productsWithPrices);
+            });
         });
     });
 });

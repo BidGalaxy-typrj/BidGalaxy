@@ -60,7 +60,8 @@ function HomeNav() {
     document.title === "BidGalaxy | AuctionDetails" ||
     document.title === "BidGalaxy | RegisterItem" ||
     document.title === "BidGalaxy | RegisterSuccess" ||
-    document.title === "BidGalaxy | UpcomingBidDetails";
+    document.title === "BidGalaxy | UpcomingBidDetails" ||
+    document.title === "BidGalaxy | Bidding History";
   return (
     <nav className="relative primaryNavBg">
       <div className="primaryNav flex flex-row justify-between items-center mx-[100px]">
