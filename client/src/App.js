@@ -38,6 +38,10 @@ import PaymentSuccess from './user/PaymentSuccess';
 import UpcomingBidDetails from './user/UpcomingBidDetails';
 import Bidders from './admin/Bidders';
 import BiddingDetails from './admin/BiddingDetails';
+import ResetPassword from './reset_password/ResetPassword';
+import ChangePassword from './reset_password/ChangePassword';
+import Confirmation from './reset_password/Confirmation';
+import Contactus from './components/Contactus';
 
 
 
@@ -83,6 +87,10 @@ function App() {
             <Route path='/user/UpcomingBidDetails' element = {<UpcomingBidDetails />} />
             <Route path='/admin/Bidders' element = {<Bidders />} />
             <Route path='/admin/BiddingDetails' element = {<BiddingDetails />} />
+            <Route path='/reset_password/ResetPassword' element ={<ResetPassword />} />
+            <Route path='/reset_password/ChangePassword' element = {<ChangePassword />} />
+            <Route path='/reset_password/Confirmation' element ={<Confirmation />} />
+            <Route path='/components/Contactus' element = {<Contactus />} />
          </Routes>
     );
   }

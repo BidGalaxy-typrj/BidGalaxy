@@ -143,7 +143,7 @@ function AuctionDetails() {
       daysLeft = "Expired"
     }
     else {
-      daysLeft = (Math.ceil(timeDiff / (1000 * 3600 * 24)))+" Days Left";
+      daysLeft = (Math.ceil(timeDiff / (1000 * 3600 * 24)));
     }
   }
 
@@ -335,7 +335,11 @@ function AuctionDetails() {
         <div className="mb-4">
           <div className="textColor text-xl font-cantora uppercase font-bold">auction date and time</div>
           <div className="text-gray-700 font-cantora text-base uppercase mt-2">{formattedDateTime} (in 24hrs)</div>
-          <div className="text-red-700 font-cantora text-base mt-2">{daysLeft}</div>
+          {daysLeft > 0 ? (
+            <div className="text-red-700 font-cantora text-base mt-2">{daysLeft} Days Left</div>
+          ) : (
+            <div className="text-red-700 font-cantora text-base mt-2">{daysLeft}</div>
+          )}
         </div>
         <div className="mb-20">
             <div className="textColor text-xl font-cantora uppercase font-bold">about the artist</div>
@@ -351,6 +355,7 @@ function AuctionDetails() {
             </div>
         </div>
         <div className="w-full flex justify-center">
+        {/* {daysLeft} */}
           {daysLeft !== "Expired" && daysLeft > 4 ? (
             <button
               type="submit"

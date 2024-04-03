@@ -3,6 +3,7 @@ import b from "../assets/signupImage.png";
 import { Link, useNavigate } from "react-router-dom";
 import HomeNav from "../components/HomePrimaryNav";
 import axios from "axios";
+import { message } from "antd";
 
 function Signin() {
   document.title = "BidGalaxy | Signin";
@@ -27,7 +28,7 @@ function Signin() {
           // Redirect to user dashboard
           navigate('/user/SideBar');
         } else {
-          alert("Invalid role or unexpected error occurred");
+          message.error("Invalid role or unexpected error occurred");
         }
       } else {
         alert(res.data.Error);
@@ -78,6 +79,11 @@ function Signin() {
                 required
               />
             </div>
+            <p className=" float-start text-left font-cantora tracking-wider">
+              <Link className="text-[#14cffc] ml-1" to="/reset_password/ResetPassword">
+                Forgot Password ?
+              </Link>
+            </p>
             <button
               type="submit"
               className=" font-cantora font-bold tracking-[0.08rem]"

@@ -3,6 +3,8 @@ import b from "../assets/signupImage.png";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import HomeNav from "../components/HomePrimaryNav";
+import { message } from "antd";
+
 
 function Signup() {
 
@@ -20,7 +22,7 @@ function Signup() {
     event.preventDefault();
     //Checking the password and confirm password
     if (values.password !== values.cpassword) {
-      alert("Password and confirm password do not match");
+      message.error("Password and confirm password do not match");
       return;
     }
     axios.post('http://localhost:8081/signup/index', values)
@@ -29,11 +31,11 @@ function Signup() {
         navigate('/signup/Verification');
       } else {
         if (res.data.Error === "Username already exists") {
-          alert("Username already exists");
+          message.error("Username already exists");
         } else if (res.data.Error === "Email address already exists") {
-            alert("Email address already exists");
+            message.error("Email address already exists");
         } else {
-            alert("Unknown server-side error");
+            message.error("Unknown server-side error");
         }
       }
     })

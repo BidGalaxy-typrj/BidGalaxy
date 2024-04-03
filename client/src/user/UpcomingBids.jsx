@@ -51,48 +51,52 @@ function UpcomingBids ({userId}) {
         navigate(`/user/UpcomingBidDetails?q=${itemId}`);
     }
 
-    return items ? (
+    return (
         <div className="wrapper">
             <div className="text-[24px] font-extrabold textColor uppercase underline tracking-wide font-cantora mt-[50px] ml-16 ">
                 upcoming bids
             </div>
-            <div className="w-full flex flex-row justify-center items-center flex-wrap p-10">
-                <div className=" flex flex-row justify-start items-start gap-7">
-                    {Array.isArray(items) && items.map((item, index) => (
-                        <div key={item.id} className=" w-80">
-                            <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                                {item.product_image1 &&
-                                    <img className={classNames(index !== items.length - 1 ? "rounded-t-lg" : "", "rounded-t-lg w-full h-60")} src={require(`../${item.product_image1}`)} alt="hello" />
-                                }
-                                <div className="p-5">
-                                    <h5 className={classNames(index !== items.length - 1 ? "mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white" : "", "mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white")}>{item.title}</h5>
-                                    <div className={classNames(index !== items.length - 1 ? "mb-3 font-normal text-gray-700 dark:text-gray-400 text-start" : "", "mb-3 font-normal text-gray-700 dark:text-gray-400 text-start")}>{item.artist_name} (Artist)</div>
-                                    <div className={classNames(index !== items.length - 1 ? "mb-3 font-normal text-gray-700 dark:text-gray-400 text-start" : "", "mb-3 font-normal text-gray-700 dark:text-gray-400 text-start")}>Type : <span className="text-sm uppercase">{item.type}</span></div>
-                                    <div className={classNames(index !== items.length - 1 ? "mb-3 font-normal text-gray-700 dark:text-gray-400 text-start" : "", "mb-3 font-normal text-gray-700 dark:text-gray-400 text-start flex items-center gap-1")}>
-                                        <MdDateRange className="h-5 w-5" />
-                                        {item.auction_date}
-                                    </div>
-                                    <div className={classNames(index !== items.length - 1 ? "mb-3 font-normal text-gray-700 dark:text-gray-400 text-start" : "", "mb-3 font-normal text-gray-700 dark:text-gray-400 text-start flex items-center gap-1")}>
-                                        <FaRupeeSign className="h-4 w-4" />
-                                        {item.price} /-
-                                        (Inclusive 18% margin)
-                                    </div>
-                                    <div onClick={() => handleAuctionInterestClick(item.id)} className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-500 rounded-lg cursor-pointer hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                        <div className="flex flex-row items-center gap-2">
-                                            View Details
-                                            <svg className="rtl:rotate-180 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-                                            </svg>
+            {items.length === 0 ? (
+                <div className="text-center text-3xl text-gray-500 font-cantora font-bold dark:text-gray-400 mt-14 mb-3">No Upcoming Bids!</div>
+            ) : (
+                <div className="w-full flex flex-row justify-center items-center flex-wrap p-10">
+                    <div className=" flex flex-row justify-start items-start gap-7">
+                        {Array.isArray(items) && items.map((item, index) => (
+                            <div key={item.id} className=" w-80">
+                                <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                                    {item.product_image1 &&
+                                        <img className={classNames(index !== items.length - 1 ? "rounded-t-lg" : "", "rounded-t-lg w-full h-60")} src={require(`../${item.product_image1}`)} alt="hello" />
+                                    }
+                                    <div className="p-5">
+                                        <h5 className={classNames(index !== items.length - 1 ? "mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white" : "", "mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white")}>{item.title}</h5>
+                                        <div className={classNames(index !== items.length - 1 ? "mb-3 font-normal text-gray-700 dark:text-gray-400 text-start" : "", "mb-3 font-normal text-gray-700 dark:text-gray-400 text-start")}>{item.artist_name} (Artist)</div>
+                                        <div className={classNames(index !== items.length - 1 ? "mb-3 font-normal text-gray-700 dark:text-gray-400 text-start" : "", "mb-3 font-normal text-gray-700 dark:text-gray-400 text-start")}>Type : <span className="text-sm uppercase">{item.type}</span></div>
+                                        <div className={classNames(index !== items.length - 1 ? "mb-3 font-normal text-gray-700 dark:text-gray-400 text-start" : "", "mb-3 font-normal text-gray-700 dark:text-gray-400 text-start flex items-center gap-1")}>
+                                            <MdDateRange className="h-5 w-5" />
+                                            {item.auction_date}
+                                        </div>
+                                        <div className={classNames(index !== items.length - 1 ? "mb-3 font-normal text-gray-700 dark:text-gray-400 text-start" : "", "mb-3 font-normal text-gray-700 dark:text-gray-400 text-start flex items-center gap-1")}>
+                                            <FaRupeeSign className="h-4 w-4" />
+                                            {item.price} /-
+                                            (Inclusive 18% margin)
+                                        </div>
+                                        <div onClick={() => handleAuctionInterestClick(item.id)} className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-500 rounded-lg cursor-pointer hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                            <div className="flex flex-row items-center gap-2">
+                                                View Details
+                                                <svg className="rtl:rotate-180 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
+                                                </svg>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
-    ) : null ;
+    ) ;
 };
 
 export default UpcomingBids;

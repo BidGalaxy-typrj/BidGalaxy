@@ -8,7 +8,10 @@ import HomeCarousel from "./HomeCarousel";
 import ucAuction1 from '../assets/ucAuction1.svg';
 import ucAuction2 from '../assets/ucAuction2.svg';
 import ucAuction3 from '../assets/ucAuction3.svg';
-import serviceImage1 from '../assets/serviceImage.svg';
+import CollectionServiceImage from '../assets/CollectionServiceImage.png';
+import ValuationImage from '../assets/ValuationImage.png';
+import ClientAdvisoryImage from '../assets/ClientAdvisoryImage.png';
+import StorageImage from '../assets/Storageimage.png';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -123,9 +126,9 @@ function Home() {
                     Client Advisory
                     <div className="flex justify-center mt-[2.5rem]">
                       <img
-                        src={serviceImage1}
+                        src={ClientAdvisoryImage}
                         alt="serviceImage1"
-                        className="w-[197px] h-[120px] rounded"
+                        className="w-[197px] h-[120px] rounded-lg"
                       />
                     </div>
                   </div>
@@ -136,9 +139,9 @@ function Home() {
                     storage
                     <div className="flex justify-center mt-[2.5rem]">
                       <img
-                        src={serviceImage1}
+                        src={StorageImage}
                         alt="serviceImage1"
-                        className="w-[197px] h-[120px] rounded"
+                        className="w-[197px] h-[120px] rounded-lg"
                       />
                     </div>
                   </div>
@@ -149,9 +152,9 @@ function Home() {
                     collection service
                     <div className="flex justify-center mt-[2.5rem]">
                       <img
-                        src={serviceImage1}
+                        src={CollectionServiceImage}
                         alt="serviceImage1"
-                        className="w-[197px] h-[120px] rounded"
+                        className="w-[197px] h-[120px] rounded-lg"
                       />
                     </div>
                   </div>
@@ -167,7 +170,7 @@ function Home() {
                       valuation
                       <div className="flex justify-center mt-[2.5rem]">
                         <img
-                          src={serviceImage1}
+                          src={ValuationImage}
                           alt="serviceImage1"
                           className="w-[197px] h-[120px] rounded"
                         />

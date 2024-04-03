@@ -156,7 +156,7 @@ app.post('/signup/index', (req, res) => {
 
                                 let mailSubject = "Email Verification";
                                 let content = '<p>Hello '+req.body.username+', Please verify your email by clicking <a href="http://localhost:3000/signup/ProfileSection?q='+randomToken+'&r='+user_id+'">here</a>.</p>';
-                                sendMail(req.body.email, mailSubject, content)
+                                sendMail(req.body.email, mailSubject, content);
 
                                 // req.session.userId = user_id;
 
@@ -199,6 +199,50 @@ app.post('/signin/index', (req, res) => {
         }
     });
 });
+
+app.post('/reset_password/ResetPassword', (req, res) => {
+    const sql = "SELECT * FROM users WHERE email_address = ?";
+    db.query(sql, [req.body.email_address], (err, data) => {
+        if(err) {
+            console.error("Error while Checking:", err);
+            return res.status(500).json({ Error: "Error while checking email address" });
+        }
+        // console.log(data);
+        if (data.length === 0) {
+            console.log("No such email found");
+            return res.status(200).json({ Error: "No such email found" });
+        }
+        if (data.length > 0) {
+            const username = data[0].username;
+            const email = req.body.email_address;
+            const token = data[0].token;
+            const user_id = data[0].user_id;
+            let mailSubject = "Reset Password";
+            let content = '<p>Hello '+username+', You can change your password by clicking <a href="http://localhost:3000/reset_password/ChangePassword?q='+token+'&r='+user_id+'">here</a>.</p>';
+            sendMail(email, mailSubject, content);
+            res.sendStatus(200);
+        } else {
+            return res.json({ Error: "This Email address is not available." });
+        }
+    });
+});
+
+app.put('/reset_password/ChangePassword/:userId', (req, res) => {
+    const userId = req.params.userId;
+
+    bcrypt.hash(req.body.new_password.toString(), salt, (err, hash) => {
+        if (err) return res.json({ Error: "Error for hashing password" });
+
+        const sql = "UPDATE users SET password = ? WHERE user_id = ?";
+
+        db.query(sql, [hash, userId], (err, result) => {
+            if(err){
+                return res.json({ Error: "Error while updating the password." });
+            }
+            return res.json({ Status: "Success" });
+        })
+    })
+})
 
 app.post('/logout', (req, res) => {
     res.clearCookie('token');
@@ -427,11 +471,12 @@ app.get('/admin/AuctionedItemDetails/:id', (req, res) => {
             console.error(err);
             res.status(500).json({ error: 'Internal Server Error' });
         } else {
-            if (results.length > 0) {
+            if (results.length === 0) {
+                return res.status(200).json({ error: 'User not found' });
+            }
+            else {
                 const userDetails = results[0]; // Assuming only one user will be returned
                 res.json(userDetails);
-            } else {
-                res.status(404).json({ error: 'User not found' });
             }
         }
     });
@@ -783,7 +828,7 @@ app.get('/user/product_details/:userId', (req, res) => {
 
         const productIds = results.map(result => result.product_id);
 
-        const productQuery = "SELECT * FROM products WHERE id IN (?)";
+        const productQuery = "SELECT * FROM products WHERE id IN (?) AND auction_date > NOW()";
         db.query(productQuery, [productIds], (productErr, productResults) => {
             if (productErr) {
                 console.error('Error while fetching product information:', productErr);
@@ -794,6 +839,8 @@ app.get('/user/product_details/:userId', (req, res) => {
                 console.error('No products found with the given product_ids');
                 return res.status(404).json({ error: 'No products found with the given product_ids' });
             }
+
+            // console.log(productResults);
 
             res.json(productResults);
         });
