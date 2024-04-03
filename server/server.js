@@ -173,7 +173,7 @@ app.post('/signup/index', (req, res) => {
 });
 
 app.post('/signin/index', (req, res) => {
-    const sql = "SELECT * FROM users WHERE username = ?";
+    const sql = "SELECT * FROM users WHERE BINARY username = ?";
     db.query(sql, [req.body.username], (err, data) => {
         if(err) {
             return res.json({ Error: "Error while Login" });
