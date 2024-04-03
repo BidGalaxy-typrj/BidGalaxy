@@ -97,7 +97,7 @@ function Signin() {
                 Password
               </label>
               <input
-                type={showPassword ? "text" : "password"}
+                type="password"
                 id="lpassword"
                 name="password"
                 placeholder="Enter Password"
