@@ -198,7 +198,7 @@ app.post('/signup/index', (req, res) => {
 });
 
 app.post('/signin/index', (req, res) => {
-    const sql = "SELECT * FROM users WHERE username = ?";
+    const sql = "SELECT * FROM users WHERE BINARY username = ?";
     db.query(sql, [req.body.username], (err, data) => {
         if(err) {
             return res.json({ Error: "Error while Login" });
@@ -1140,8 +1140,6 @@ app.get('/user/bidding_history/:userId', (req, res) => {
 
         const emailAddress = results[0].email_address;
 
-        console.log(emailAddress);
-
         const productQuery = "SELECT product_id, final_price from sold_products WHERE buyer_email = ?";
         db.query(productQuery, [emailAddress], (productErr, productResults) => {
             if (productErr) {
@@ -1160,9 +1158,6 @@ app.get('/user/bidding_history/:userId', (req, res) => {
                 return acc;
             }, {});
 
-            console.log(productIds);
-            console.log(finalPrices);
-
             const productDetailsQuery = "SELECT * FROM products WHERE id IN (?)";
             db.query(productDetailsQuery, [productIds], (productDetailsErr, productDetailsResults) => {
                 if (productDetailsErr) {
@@ -1175,14 +1170,11 @@ app.get('/user/bidding_history/:userId', (req, res) => {
                     return res.status(200).json({ error: 'No products found with the given email_address of this user' });
                 }
 
-                console.log(productDetailsResults);
-
                 // Merge product details with meeting links
                 const productsWithPrices = productDetailsResults.map(product => ({
                     ...product,
                     final_price: finalPrices[product.id] || null
                 }));
-                console.log(productsWithPrices);
 
                 res.json(productsWithPrices);
             });
