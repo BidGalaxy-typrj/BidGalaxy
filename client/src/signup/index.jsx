@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import HomeNav from "../components/HomePrimaryNav";
 import { message } from "antd";
+import { IoEye,IoEyeOff } from "react-icons/io5";
 
 
 function Signup() {
@@ -20,6 +21,16 @@ function Signup() {
 
   const handleRegistration = (event) => {
     event.preventDefault();
+    if (!validatePassword(values.password)) {
+      // Display error message if password is invalid
+      alert("Invalid Password Format!!\nPassword must contain \natleast 1 symbol except (!,,,.,$,<,.,>,|)\natleast 1 small letter\natleast 1 captial character\natleast 1 number");
+      return;
+    }
+    if (!validatePassword(values.cpassword)) {
+      // Display error message if password is invalid
+      alert("Invalid Password Format!!\nPassword must contain \natleast 1 symbol except (!,,,.,$,<,.,>,|)\natleast 1 small letter\natleast 1 captial character\natleast 1 number");
+      return;
+    }
     //Checking the password and confirm password
     if (values.password !== values.cpassword) {
       message.error("Password and confirm password do not match");
@@ -41,6 +52,31 @@ function Signup() {
     })
     .then(err => console.log(err));
   }
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const validatePassword = (password) => {
+    // Define regular expressions for each required character type
+    const lowercaseRegex = /[a-z]/;
+    const uppercaseRegex = /[A-Z]/;
+    const digitRegex = /[0-9]/;
+    const symbolRegex = /[-\\/,<>$!^&*()_+|~=`{}\[\]:";'<>?,.@#%]/; // Excluding certain symbols
+
+    // Check if password meets all criteria
+    const hasLowercase = lowercaseRegex.test(password);
+    const hasUppercase = uppercaseRegex.test(password);
+    const hasDigit = digitRegex.test(password);
+    const hasSymbol = symbolRegex.test(password);
+    const isLengthValid = password.length >= 8;
+
+    // Return true if all criteria are met, false otherwise
+    return hasLowercase && hasUppercase && hasDigit && hasSymbol && isLengthValid;
+};
+
   return (
     <div>
       <HomeNav />
@@ -90,27 +126,33 @@ function Signup() {
               <label htmlFor="password" className=" font-cantora tracking-wide">
                 Password
               </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                placeholder="Enter Password"
-                onChange={e => setValues({...values, password : e.target.value})}
-                required
-              />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  name="password"
+                  placeholder="Enter Password"
+                  value={values.password}
+                  onChange={(e) => setValues({ ...values, password: e.target.value })}
+                  required
+                />
             </div>
             <div className="form-group signup-form-group">
               <label htmlFor="cpassword" className=" font-cantora tracking-wide">
                 Confirm Password
               </label>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="cpassword"
                 name="cpassword"
                 placeholder="Enter Confirm Password"
                 onChange={e => setValues({...values, cpassword : e.target.value})}
                 required
               />
+            </div>
+            <div>
+            <button className="bg-tabcolor p-3 rounded-lg" onClick={togglePasswordVisibility}>
+              Show Password
+            </button>
             </div>
             <button
               type="submit"

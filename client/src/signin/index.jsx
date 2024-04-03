@@ -17,6 +17,12 @@ function Signin() {
   axios.defaults.withCredentials = true;
   const handleSignin = (event) => {
     event.preventDefault();
+    const password = values.password;
+    if (!validatePassword(password)) {
+      // Display error message if password is invalid
+      alert("Invalid Password Format!!");
+      return;
+    }
     axios.post('http://localhost:8081/signin/index', values)
     .then(res => {
       if (res.data.Status === "Success") {
@@ -36,6 +42,26 @@ function Signin() {
     })
     .then(err => console.log(err));
   }
+
+  const validatePassword = (password) => {
+    // Define regular expressions for each required character type
+    const lowercaseRegex = /[a-z]/;
+    const uppercaseRegex = /[A-Z]/;
+    const digitRegex = /[0-9]/;
+    const symbolRegex = /[-\\/,<>$!^&*()_+|~=`{}\[\]:";'<>?,.@#%]/; // Excluding certain symbols
+
+    // Check if password meets all criteria
+    const hasLowercase = lowercaseRegex.test(password);
+    const hasUppercase = uppercaseRegex.test(password);
+    const hasDigit = digitRegex.test(password);
+    const hasSymbol = symbolRegex.test(password);
+    const isLengthValid = password.length >= 8;
+
+    // Return true if all criteria are met, false otherwise
+    return hasLowercase && hasUppercase && hasDigit && hasSymbol && isLengthValid;
+};
+
+
   return (
     <div>
       <HomeNav />
@@ -71,7 +97,7 @@ function Signin() {
                 Password
               </label>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="lpassword"
                 name="password"
                 placeholder="Enter Password"
