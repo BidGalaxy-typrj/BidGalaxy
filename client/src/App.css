@@ -25,6 +25,7 @@ body {
 }
 .secondNavBg {
   background-color: #69bee2;
+  height: 55px;
 }
 .secondNav {
   height: 50px;
@@ -355,49 +356,4 @@ label.required-highlight:after {
 
 .ProfileSection_labels {
   margin: auto 0;
-}
-
-/* Contact us  */
-
-.logo {
-  font-weight: bold;
-  margin-right: auto;
-}
-
-.main-body {
-  padding: 20px;
-}
-
-.first{
-  background-color: #95DCEE;
-  text-align: center;
-  border-radius: 15px;
-  padding-bottom: 10px;
-}
-
-input {
-  width: 100%;
-  padding: 8px;
-  box-sizing: border-box;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  outline: none;
-}
-
-.column1 {
-  display: flex;
-}
-
-.section1 {
-  width: 60%;
-  margin-right: 20px;
-}
-
-.section2 {
-  background-color: #95DCEE;
-  margin: 20px;
-  width: 40%;
-  height: 70vh;
-  border-radius: 15px;
-  padding: 10px;
 }

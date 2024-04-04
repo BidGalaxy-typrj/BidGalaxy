@@ -1,15 +1,41 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 
-const Dashboard = () =>{
+
+const Dashboard = ({userId}) =>{
 
     document.title = "BidGalaxy | UserDashboard";
 
     const [activityOpen,setActivityOpen] = useState(false)
 
-    const [performanceOpen,setPerformanceOpen] = useState(false)
+    // const [performanceOpen,setPerformanceOpen] = useState(false)
 
-    const [overviewOpen,setOverviewOpen] = useState(false)
+    // const [overviewOpen,setOverviewOpen] = useState(false)
+
+    const [bidCount, setBidCount] = useState('');
+
+    useEffect(() => {
+        axios.get(`http://localhost:8081/user/bids/count/${userId}`)
+        .then((res) => {
+            setBidCount(res.data.count);
+        }).catch((err) => {
+            console.log(err);
+        });
+    }, [userId]);
+
+    const [totalBidCount, setTotalBidCount] = useState('');
+
+    useEffect(() => {
+        axios.get('http://localhost:8081/user/total_bids/count')
+        .then((res) => {
+            setTotalBidCount(res.data.count);
+        }).catch((err) => {
+            console.log(err);
+        });
+    }, [userId]);
+
+    const avgBids = bidCount/totalBidCount;
 
     return (
         <div className="w-full">
@@ -20,14 +46,14 @@ const Dashboard = () =>{
             <div className={`p-5 flex justify-around ${activityOpen ? "duration-500" : "hidden"}`}>
                 <div className="flex flex-col size-1/3 pl- bg-gradient-to-bl from-tabcolor rounded-xl">
                     <div className="p-5 flex m-5 justify-center"><span className="text-4xl">Total Bids</span></div>
-                    <div className="p-5 flex mt-0 m-5 justify-center pt-0"><span className="text-4xl">128</span></div>
+                    <div className="p-5 flex mt-0 m-5 justify-center pt-0"><span className="text-4xl">{bidCount}</span></div>
                 </div>
                 <div className="flex flex-col size-1/3 pl- bg-gradient-to-br from-tabcolor rounded-xl">
                     <div className="p-5 m-5 flex justify-center"><span className="text-4xl">Average Bids</span></div>
-                    <div className="p-5 m-5 mt-0 flex justify-center pt-0"><span className="text-4xl">25</span></div>
+                    <div className="p-5 m-5 mt-0 flex justify-center pt-0"><span className="text-4xl">{avgBids}</span></div>
                 </div>
             </div>
-            <div className={`flex w-full h-20 bg-tabcolor hover:cursor-pointer`} onClick={()=>setPerformanceOpen(!performanceOpen)}>
+            {/* <div className={`flex w-full h-20 bg-tabcolor hover:cursor-pointer`} onClick={()=>setPerformanceOpen(!performanceOpen)}>
                 <div className="flex w-2/3 justify-center p-5"><span className="font-bold text-3xl">Winning Performance</span></div>
                 <div className="flex w-1/3 justify-end p-5 items-center"><IoIosArrowDown className={`font-bold text-3xl ${performanceOpen && "rotate-180"}`}/></div>
             </div>
@@ -54,7 +80,7 @@ const Dashboard = () =>{
                     <div className="p-5 m-5 flex justify-center"><span className="text-4xl">Highest Bid Amount</span></div>
                     <div className="p-5 m-5 mt-0 flex justify-center pt-0"><span className="text-4xl">$4,000</span></div>
                 </div>
-            </div>
+            </div> */}
         </div>
     )
 }

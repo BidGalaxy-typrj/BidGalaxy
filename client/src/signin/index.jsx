@@ -37,7 +37,7 @@ function Signin() {
           message.error("Invalid role or unexpected error occurred");
         }
       } else {
-        alert(res.data.Error);
+        message.error(res.data.Error);
       }
     })
     .then(err => console.log(err));

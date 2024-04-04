@@ -211,7 +211,7 @@ const SideBar = () => {
             open ? "w-3/4" : "w-full"
           }`}
         >
-          <Dashboard />
+          <Dashboard userId={userId} />
         </div>
 
         <div

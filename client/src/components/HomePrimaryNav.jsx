@@ -41,7 +41,9 @@ function HomeNav() {
     document.title === "BidGalaxy | Terms&Conditions" ||
     document.title === "BidGalaxy | Reset Password" ||
     document.title === "BidGalaxy | Change Password" ||
-    document.title === "BidGalaxy | Contact";
+    document.title === "BidGalaxy | Contact" ||
+    document.title === "BidGalaxy | ArtAuctionItems" ||
+    document.title === "BidGalaxy | ArtifactAuctionItems";
   const AdminSection =
     document.title === "BidGalaxy | AdminDashboard" ||
     document.title === "BidGalaxy | PlaceItem" ||

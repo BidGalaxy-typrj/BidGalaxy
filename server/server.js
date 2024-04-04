@@ -171,6 +171,10 @@ app.post('/signup/index', (req, res) => {
                         db.query(insertUserQuery, values, (err, result) => {
                             if (err) return res.json({ Error: "Error while registering. Please try again later." });
 
+                            let mailSubject = "Email Verification";
+                            let content = '<p>Hello '+req.body.username+', Please verify your email by clicking <a href="http://localhost:3000/signup/ProfileSection?q='+randomToken+'&r='+user_id+'">here</a>.</p>';
+                            sendMail(req.body.email, mailSubject, content);
+
                             //Retrieving the last inserted user_id
                             const user_id = result.insertId;
                             // Insert into user_details table
@@ -178,10 +182,6 @@ app.post('/signup/index', (req, res) => {
                             const userDetailsValues = [user_id, req.body.email];
                             db.query(insertUserDetailsQuery, userDetailsValues, (err) => {
                                 if (err) return res.json({ Error: "Error while inserting user details" });
-
-                                let mailSubject = "Email Verification";
-                                let content = '<p>Hello '+req.body.username+', Please verify your email by clicking <a href="http://localhost:3000/signup/ProfileSection?q='+randomToken+'&r='+user_id+'">here</a>.</p>';
-                                sendMail(req.body.email, mailSubject, content);
 
                                 // req.session.userId = user_id;
 
@@ -220,7 +220,7 @@ app.post('/signin/index', (req, res) => {
                 }
             });
         } else {
-            return res.json({ Error: "Invalid Email or Password" });
+            return res.json({ Error: "Invalid Username or Password" });
         }
     });
 });
@@ -619,7 +619,7 @@ app.get('/user/user_details/:userId', (req, res) => {
 //Fetching items of particular category
 app.get('/home/artItems/:category',(req,res)=>{
     const category = req.params.category;
-    db.query('SELECT * FROM products WHERE type = ?',[category],(err,result)=>{
+    db.query('SELECT * FROM products WHERE type = ? AND auction_date > NOW()',[category],(err,result)=>{
         if(err){
             console.log(err);
             res.status(500).json({error:"Internal Server Error"});
@@ -1179,6 +1179,32 @@ app.get('/user/bidding_history/:userId', (req, res) => {
                 res.json(productsWithPrices);
             });
         });
+    });
+});
+
+app.get('/user/bids/count/:userId', (req, res) => {
+    const userId = req.params.userId;
+    db.query("SELECT COUNT(*) AS count FROM product_registration WHERE user_id = ?", [userId], (err, result) => {
+      if (err) {
+        console.error('Error fetching user_queries count:', err);
+        res.status(500).json({ error: 'An error occurred while fetching user_queries count' });
+        return;
+      }
+      const count = result[0].count;
+      res.status(200).json({ count });
+    });
+});
+
+app.get('/user/total_bids/count', (req, res) => {
+    const userId = req.params.userId;
+    db.query("SELECT COUNT(*) AS count FROM product_registration", (err, result) => {
+      if (err) {
+        console.error('Error fetching user_queries count:', err);
+        res.status(500).json({ error: 'An error occurred while fetching user_queries count' });
+        return;
+      }
+      const count = result[0].count;
+      res.status(200).json({ count });
     });
 });
 
