@@ -171,12 +171,13 @@ app.post('/signup/index', (req, res) => {
                         db.query(insertUserQuery, values, (err, result) => {
                             if (err) return res.json({ Error: "Error while registering. Please try again later." });
 
+                            //Retrieving the last inserted user_id
+                            const user_id = result.insertId;
+
                             let mailSubject = "Email Verification";
                             let content = '<p>Hello '+req.body.username+', Please verify your email by clicking <a href="http://localhost:3000/signup/ProfileSection?q='+randomToken+'&r='+user_id+'">here</a>.</p>';
                             sendMail(req.body.email, mailSubject, content);
 
-                            //Retrieving the last inserted user_id
-                            const user_id = result.insertId;
                             // Insert into user_details table
                             const insertUserDetailsQuery = "INSERT INTO user_details (user_id, email_address) VALUES (?, ?)";
                             const userDetailsValues = [user_id, req.body.email];
@@ -509,7 +510,7 @@ app.get('/admin/AuctionedItemDetails/:id', (req, res) => {
 
 // We are getting the total count of users
 app.get('/admin/users/count', (req, res) => {
-    db.query('SELECT COUNT(*) AS count FROM users', (err, result) => {
+    db.query("SELECT COUNT(*) AS count FROM users WHERE username <> 'Admin'", (err, result) => {
       if (err) {
         console.error('Error fetching user count:', err);
         res.status(500).json({ error: 'An error occurred while fetching user count' });

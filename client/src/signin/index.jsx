@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import HomeNav from "../components/HomePrimaryNav";
 import axios from "axios";
 import { message } from "antd";
+import { FaEye } from "react-icons/fa";
 
 function Signin() {
   document.title = "BidGalaxy | Signin";
@@ -42,6 +43,12 @@ function Signin() {
     })
     .then(err => console.log(err));
   }
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
 //   const validatePassword = (password) => {
 //     // Define regular expressions for each required character type
@@ -96,14 +103,17 @@ function Signin() {
               <label htmlFor="lpassword" className=" font-cantora tracking-wide">
                 Password
               </label>
-              <input
-                type="password"
-                id="lpassword"
-                name="password"
-                placeholder="Enter Password"
-                onChange={e => setValues({...values, password : e.target.value})}
-                required
-              />
+              <div className="flex flex-row items-center gap-3">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="lpassword"
+                  name="password"
+                  placeholder="Enter Password"
+                  onChange={e => setValues({...values, password : e.target.value})}
+                  required
+                />
+                <FaEye className="h-5 w-5 cursor-pointer hover:scale-110 transition-all ease-out" onClick={togglePasswordVisibility} />
+              </div>
             </div>
             <p className=" float-start text-left font-cantora tracking-wider">
               <Link className="text-[#14cffc] ml-1" to="/reset_password/ResetPassword">

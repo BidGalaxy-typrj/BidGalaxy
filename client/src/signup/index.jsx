@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import HomeNav from "../components/HomePrimaryNav";
 import { message } from "antd";
-import { IoEye,IoEyeOff } from "react-icons/io5";
+import { FaEye } from "react-icons/fa";
 
 
 function Signup() {
@@ -23,12 +23,12 @@ function Signup() {
     event.preventDefault();
     if (!validatePassword(values.password)) {
       // Display error message if password is invalid
-      message.error("Invalid Password Format!!\nPassword must contain \natleast 1 symbol except (!,,,.,$,<,.,>,|)\natleast 1 small letter\natleast 1 captial character\natleast 1 number");
+      message.error("Invalid Password Format!Password must contain atleast 1 symbol except (!,,,.,$,<,.,>,|), atleast 1 small letter, atleast 1 captial character, atleast 1 number");
       return;
     }
     if (!validatePassword(values.cpassword)) {
       // Display error message if password is invalid
-      message.error("Invalid Password Format!!\nPassword must contain \natleast 1 symbol except (!,,,.,$,<,.,>,|)\natleast 1 small letter\natleast 1 captial character\natleast 1 number");
+      message.error("Invalid Password Format!!Password must contain atleast 1 symbol except (!,,,.,$,<,.,>,|), atleast 1 small letter, atleast 1 captial character, atleast 1 number");
       return;
     }
     //Checking the password and confirm password
@@ -126,15 +126,18 @@ function Signup() {
               <label htmlFor="password" className=" font-cantora tracking-wide">
                 Password
               </label>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  id="password"
-                  name="password"
-                  placeholder="Enter Password"
-                  value={values.password}
-                  onChange={(e) => setValues({ ...values, password: e.target.value })}
-                  required
-                />
+                <div className="flex flex-row gap-3 items-center">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    id="password"
+                    name="password"
+                    placeholder="Enter Password"
+                    value={values.password}
+                    onChange={(e) => setValues({ ...values, password: e.target.value })}
+                    required
+                  />
+                  <FaEye className="h-5 w-5 cursor-pointer hover:scale-110 transition-all ease-out" onClick={togglePasswordVisibility} />
+                </div>
             </div>
             <div className="form-group signup-form-group">
               <label htmlFor="cpassword" className=" font-cantora tracking-wide">
@@ -150,9 +153,6 @@ function Signup() {
               />
             </div>
             <div>
-            <button className="bg-tabcolor p-3 rounded-lg" onClick={togglePasswordVisibility}>
-              Show Password
-            </button>
             </div>
             <button
               type="submit"
