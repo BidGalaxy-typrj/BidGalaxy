@@ -1,4 +1,4 @@
-**# BidGalaxy Online Auction Website**
+#BidGalaxy Online Auction Website
 Welcome to BidGalaxy, the premier online auction platform for art and artifacts enthusiasts! Below you'll find essential information to get started with our platform.
 **### Overview**
 BidGalaxy is an online auction website where users can create an account, browse through a curated selection of art and artifacts, register for desired products, and participate in auctions to win exclusive items. Our platform focuses on providing a seamless auction experience for users interested in acquiring unique pieces.
